@@ -88,6 +88,7 @@ html {
     .sidebar__item:not(.sidebar__item--first) {
       transform: translateX(-4%);
       background-color: $orange; // Ensure $orange is defined
+      color: white;
     }
 
     &::before,
@@ -106,9 +107,9 @@ html {
   align-items: center;
   justify-content: center;
   font-size: 1.7rem;
+  color: $orange;
   cursor: pointer;
   transition: transform 0.4s;
-
   i {
     color: inherit;
   }

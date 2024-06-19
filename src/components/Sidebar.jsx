@@ -19,7 +19,7 @@ import clsx from "clsx";
 
 function Sidebar() {
   return (
-    <div className="sidebar absolute bg-[#1f1d2b] h-[100vh] w-[5rem] flex flex-col justify-around  items-center rounded-r-[8px] z-[1]">
+    <div className="sidebar absolute bg-[#1f1d2b] h-[100vh] w-[5rem] flex flex-col justify-around  items-center rounded-r-[8px] z-[1] overflow-hidden">
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item bg-[#a45353] sidebar__item--first">
           <div className="font-bold bg-clip-text text-transparent bg-gradient-to-b from-orange-400 to-red-400">
@@ -29,37 +29,37 @@ function Sidebar() {
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-house"></i>
         </div>
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-percent"></i>
         </div>
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-chart-pie"></i>
         </div>
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-envelope"></i>
         </div>
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-bell"></i>{" "}
         </div>
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-gear"></i>
         </div>
       </div>
       <div className="sidebar__item-wrapper">
         <div className="sidebar__item">
-          <i className="fa-solid fa-shop"></i>
+          <i className="fa-solid fa-right-from-bracket"></i>
         </div>
       </div>
     </div>
