@@ -10,7 +10,7 @@ function Layout({ children }) {
     <div className="layout relative flex items-start">
       <Sidebar />
       <div className="w-full min-h-[100vh] h-fit bg-[#252836] p-[1.2rem_2.5rem_1.2rem_6.5rem]">
-        <Header title={title}>
+        <Header>
           <div className="search-input">
             <i className="fa-solid fa-magnifying-glass text-white"></i>
             <input
