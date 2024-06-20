@@ -33,6 +33,32 @@ const foods = [
     price: "$ 2.29",
     available: "20 Bowls available",
   },
+  {
+    image: lagmon,
+    name: "Spicy seasoned seafood noodles",
+    price: "$ 2.29",
+    available: "20 Bowls available",
+  }, {
+    image: lagmon,
+    name: "Spicy seasoned seafood noodles",
+    price: "$ 2.29",
+    available: "20 Bowls available",
+  }, {
+    image: lagmon,
+    name: "Spicy seasoned seafood noodles",
+    price: "$ 2.29",
+    available: "20 Bowls available",
+  }, {
+    image: lagmon,
+    name: "Spicy seasoned seafood noodles",
+    price: "$ 2.29",
+    available: "20 Bowls available",
+  }, {
+    image: lagmon,
+    name: "Spicy seasoned seafood noodles",
+    price: "$ 2.29",
+    available: "20 Bowls available",
+  },
 ];
 
 function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
@@ -52,7 +78,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
           </div>
         </div>
       )}
-      <div className="food-cards--grid mt-[0.5rem] w-fit h-fit grid grid-cols-3 max-[890px]:grid-cols-2 max-[600px]:grid-cols-1 max-[600px]:flex max-[600px]:flex-wrap max-[600px]:justify-center gap-[2rem_3rem]">
+      <div className="w-full flex flex-wrap gap-[4rem_5rem]">
         {foods.map((item, ind) => (
           <div key={ind} className="food-card--sm">
             <img src={item.image} />

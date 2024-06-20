@@ -1,31 +1,11 @@
-import { useEffect, useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-
-import Layout from "./components/Layout";
-import Home from "./pages/home";
-import Dashboard from "./pages/dashboard";
-
 import "./assets/styles/global.scss";
-
+import Layout from "./layouts/Layout";
+import Routes from "./routes/routes";
 function App() {
-  const [title, setTitle] = useState("Jaegar Rosta");
-
   return (
-    <Layout title={title} setTitle={setTitle}>
-      <RouterProvider
-        router={createBrowserRouter([
-          {
-            path: "/",
-            element: <Home setTitle={setTitle} />,
-          },
-          {
-            path: "dashboard",
-            element: <Dashboard setTitle={setTitle} />,
-          },
-        ])}
-      />
+    <Layout>
+      <Routes/>
     </Layout>
   );
 }
-
 export default App;
