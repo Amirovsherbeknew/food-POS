@@ -1,6 +1,5 @@
 import clsx from "clsx";
-import { v4 as uuidv4 } from "uuid";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const linkLists = [
   {
@@ -32,14 +31,14 @@ const linkLists = [
 function Navbar({ links = linkLists }) {
   return (
     <div className={clsx("mt-[1.2rem]", "flex", "gap-8", "flex-wrap")}>
-      {links.map((item) => (
-        <Link
-          key={uuidv4()}
+      {links.map((item,index) => (
+        <NavLink
+          key={index}
           to={item.to || "#"}
           className={clsx("link-item", item.selected && "link-item--selected")}
         >
           {item.value}
-        </Link>
+        </NavLink>
       ))}
     </div>
   );
