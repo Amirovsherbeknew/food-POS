@@ -1,5 +1,4 @@
 import FoodList from "../../components/FoodList";
-
 function Home() {
   return (
     <div>
@@ -7,5 +6,4 @@ function Home() {
     </div>
   );
 }
-
 export default Home;
