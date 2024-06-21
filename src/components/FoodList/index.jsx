@@ -289,10 +289,11 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                         onChange={(e) => handleFoodNote(e.target.value, ind)}
                       />
                     </div>
-                    <div className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:bg-black">
-                      <DeleteOutlined
-                        onClick={(e) => handleFoodNote("", ind)}
-                      />
+                    <div
+                      onClick={(e) => handleFoodNote("", ind)}
+                      className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:bg-black"
+                    >
+                      <DeleteOutlined />
                     </div>
                   </div>
                 </div>
@@ -309,7 +310,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
           </div>
           <div className="flex-subtotal mt-4 flex flex-wrap justify-between items-center gap-4 font-[400]">
             <span className="block text-[#ABBBC2] text-[1rem]">Sub total</span>
-            <span className="block">$ {total}</span>
+            <span className="block">$ {total.toFixed(3)}</span>
           </div>
           <button className="mt-10 mb-4 w-full rounded-[8px] py-4 bg-[#EA7C69] text-[1rem] shadow-sidebar-effect">
             Continue to Payment
