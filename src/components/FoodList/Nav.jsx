@@ -31,7 +31,15 @@ const linkLists = [
 function Nav({ links = linkLists }) {
   return (
     <>
-      <div className={clsx("mt-[1.2rem]", "flex", "gap-8", "flex-wrap")}>
+      <div
+        className={clsx(
+          "mt-[1.2rem]",
+          "flex",
+          "gap-8",
+          "flex-wrap",
+          "text-white"
+        )}
+      >
         {links.map((item, index) => (
           <Link
             key={index}

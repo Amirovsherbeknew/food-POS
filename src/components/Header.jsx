@@ -1,5 +1,5 @@
-import titleList from '../data.json'
-function Header({children, style = {} }) {
+import titleList from "@/data.json";
+function Header({ children, style = {} }) {
   const date = new Date();
   return (
     <div
@@ -7,8 +7,10 @@ function Header({children, style = {} }) {
       style={style}
     >
       <div>
-        <span className="text-lg">{titleList.title[window.location.pathname]}</span>
-        <span className="mt-[0.5rem] font-[400] text-[1rem]">
+        <span className="text-lg text-white">
+          {titleList.title[window.location.pathname]}
+        </span>
+        <span className="mt-[0.5rem] font-[400] text-[1rem] text-white">
           {date.toDateString()}
         </span>
       </div>

@@ -6,7 +6,6 @@
   margin: 0;
   padding: 0;
   font-family: "Barlow", sans-serif;
-  color: white;
 }
 
 a {
@@ -61,7 +60,7 @@ hr {
 .text-md {
   display: block;
   font-weight: 600;
-  font-size: 1.4rem;
+  font-size: 1.4rem !important;
 }
 
 .search-input {
@@ -78,6 +77,7 @@ hr {
     outline: none;
     border: none;
   }
+  color: white;
 }
 .select {
   position: relative;
@@ -140,23 +140,24 @@ hr {
   }
   & img {
     display: block;
-    width: 25vh;
-    height: 25vh;
-    border-radius: 50%;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
     z-index: 1;
+    object-fit: cover;
+    object-position: center;
   }
   & .food-card--sm-back {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 75%;
+    height: 80%;
     width: 100%;
     border-radius: 8px;
     background-color: $blackDark;
     z-index: 0;
   }
   & .food-name {
-    margin-top: 1.5rem;
+    margin-top: 1.2rem;
     font-weight: 500;
   }
   & .food-price {
