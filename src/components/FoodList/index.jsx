@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { Button, Drawer, Flex } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -19,6 +19,7 @@ function convertNumber(alphaNum) {
 }
 
 function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
+  const [selectProductList, setSelectProductList] = useState([]);
   // Buttons logic
   const [btns, setBtns] = useState([
     {
@@ -41,6 +42,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Foods
   const [foodLst, setFoodLst] = useState([
     {
+      id: 1,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -49,6 +51,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 2,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -57,6 +60,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 3,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -65,6 +69,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 4,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -73,6 +78,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 5,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -81,6 +87,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 6,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -89,6 +96,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 7,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -97,6 +105,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 8,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -105,6 +114,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 9,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -113,6 +123,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 10,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -121,6 +132,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 11,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -129,6 +141,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 12,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -137,6 +150,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       note: "",
     },
     {
+      id: 13,
       image: lagmon,
       name: "Spicy seasoned seafood noodles",
       price: "$ 2.29",
@@ -178,7 +192,9 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       setbtnInd(ind);
     }
   }
-
+  const FilterFoodList = () => {
+    return foodLst.filter(item => selectProductList.includes(item.id))
+  }
   // State handlers for foods
   function handleFoodQuantity(ind) {
     setFoodLst([
@@ -191,6 +207,26 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     ]);
   }
 
+  const ViewSelectProduct = (id) => {
+    if (!selectProductList.includes(id)) {
+      selectProductList.push(id);
+    }
+    FilterFoodList()
+    setOpen(true);
+  };
+  const ProductQuantity = (val, id) => {
+    let totalPrice = 0
+    setFoodLst(
+      foodLst.map((item) => {
+        if (item.id === id) {
+          return { ...item, quantity: val };
+        } else return item;
+      })
+    );
+    for (let i = 0; i < array.length; i++) {
+      
+    }
+  };
   function handleFoodNote(text, ind) {
     setFoodLst([
       ...foodLst.slice(0, ind),
@@ -201,7 +237,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       ...foodLst.slice(ind + 1),
     ]);
   }
-
   return (
     <>
       {/* Drawer (Modal) */}
@@ -248,56 +283,61 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                   Price
                 </div>
               </div>
-              {foodLst.map((item, ind) => (
-                <div
-                  key={ind}
-                  className="food-card mt-2 px-4 py-4 rounded-[8px] duration-400 hover:shadow-food-card"
-                >
-                  <div className="flex-outer flex items-center gap-4 text-[1rem]">
-                    <div className="col-first w-[85%]">
-                      <div className="flex-inner flex justify-between items-center gap-4">
-                        <div className="food-card__desc w-[80%] flex items-center gap-[1rem]">
-                          <img
-                            src={item.image}
-                            className="food-card__image h-14 w-14 rounded-full object-cover object-center"
-                          />
-                          <div className="food-card__info flex flex-col justify-between text-[0.95rem]">
-                            <div className="food-card__name">
-                              Spicy seasoned sea...
-                            </div>
-                            <div className="food-card__price text-[#ABBBC2]">
-                              {item.price}
+              {FilterFoodList().map((item, ind) => (
+                  <div
+                    key={ind}
+                    className="food-card mt-2 px-4 py-4 rounded-[8px] duration-400 hover:shadow-food-card"
+                  >
+                    <div className="flex-outer flex items-center gap-4 text-[1rem]">
+                      <div className="col-first w-[85%]">
+                        <div className="flex-inner flex justify-between items-center gap-4">
+                          <div className="food-card__desc w-[80%] flex items-center gap-[1rem]">
+                            <img
+                              src={item.image}
+                              className="food-card__image h-14 w-14 rounded-full object-cover object-center"
+                            />
+                            <div className="food-card__info flex flex-col justify-between text-[0.95rem]">
+                              <div className="food-card__name">
+                                Spicy seasoned sea...
+                              </div>
+                              <div className="food-card__price text-[#ABBBC2]">
+                                {item.price}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="col-inner-second aspect-square w-[20%] h-fit px-2 py-2 rounded-[8px] border-[1px] border-[#393C49] bg-[#2D303E] flex items-center justify-center text-[1.1rem]">
-                          {item.quantity}
+                          <input
+                            type="text"
+                            className="col-inner-second aspect-square w-[20%] h-fit px-2 py-2 rounded-[8px] border-[1px] border-[#393C49] bg-[#2D303E] flex items-center justify-center text-[1.1rem]"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              ProductQuantity(e.target.value, item.id)
+                            }
+                          />
                         </div>
                       </div>
+                      <div className="col-second w-[15%] flex justify-center text-center text-[1.1rem]">
+                        $ {convertNumber(item.price) * item.quantity}
+                      </div>
                     </div>
-                    <div className="col-second w-[15%] flex justify-center text-center text-[1.1rem]">
-                      $ {convertNumber(item.price) * item.quantity}
+                    <div className="mt-4 flex-outer flex items-center gap-4 text-[1rem]">
+                      <div className="col-first w-[85%] text-[0.9rem]">
+                        <input
+                          type="text"
+                          placeholder="Please, just a little bit spicy only."
+                          value={item.note || ""}
+                          className="rounded-[8px] outline-none border-[1px] border-[#393C49] w-full !h-full px-4 py-[1rem] bg-[#2D303E] flex items-center font-[400] text-[1rem]"
+                          onChange={(e) => handleFoodNote(e.target.value, ind)}
+                        />
+                      </div>
+                      <div
+                        onClick={(e) => handleFoodNote("", ind)}
+                        className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:bg-black"
+                      >
+                        <DeleteOutlined />
+                      </div>
                     </div>
                   </div>
-                  <div className="mt-4 flex-outer flex items-center gap-4 text-[1rem]">
-                    <div className="col-first w-[85%] text-[0.9rem]">
-                      <input
-                        type="text"
-                        placeholder="Please, just a little bit spicy only."
-                        value={item.note || ""}
-                        className="rounded-[8px] outline-none border-[1px] border-[#393C49] w-full !h-full px-4 py-[1rem] bg-[#2D303E] flex items-center font-[400] text-[1rem]"
-                        onChange={(e) => handleFoodNote(e.target.value, ind)}
-                      />
-                    </div>
-                    <div
-                      onClick={(e) => handleFoodNote("", ind)}
-                      className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:bg-black"
-                    >
-                      <DeleteOutlined />
-                    </div>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>
@@ -318,7 +358,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
         </div>
       </Drawer>
       {/* Foods Nav */}
-      {seenFoodNav && <Nav />}
+      {!seenFoodNav || <Nav />}
       {/* Foods Filter */}
       {seenFoodFilter && (
         <div className="filter mt-[1.5rem] flex flex-wrap justify-between items-center !text-white">
@@ -339,15 +379,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
           <div
             key={ind}
             className="food-card--sm cursor-pointer !text-white"
-            onClick={() => {
-              if (open) {
-                onClose();
-              } else {
-                handleFoodQuantity(ind);
-                setTotal(total + convertNumber(foodLst[ind].price));
-                showDrawer();
-              }
-            }}
+            onClick={() => ViewSelectProduct(item.id)}
           >
             <img src={item.image} />
             <div className="food-name">{item.name}</div>
