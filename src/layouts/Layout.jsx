@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
 
 function Layout({ children }) {
   const [searchText, setSearchText] = useState("");
@@ -9,7 +9,7 @@ function Layout({ children }) {
   return (
     <div className="layout relative flex items-start">
       <Sidebar />
-      <div className="w-full min-h-[100vh] h-fit bg-[#252836] p-[1.2rem_2.5rem_1.2rem_6.5rem]">
+      <div className="w-full min-h-[100vh] h-fit bg-[#252836] p-[1.2rem_3rem_1.2rem_7rem]">
         <Header>
           <div className="search-input">
             <i className="fa-solid fa-magnifying-glass text-white"></i>

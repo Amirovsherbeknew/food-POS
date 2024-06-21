@@ -1,4 +1,4 @@
-import titleList from "../data.json";
+import titleList from "@/data.json";
 function Header({ children, style = {} }) {
   const date = new Date();
   return (

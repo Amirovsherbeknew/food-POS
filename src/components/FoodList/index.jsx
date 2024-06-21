@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { Button, Drawer, Flex } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 
 import Nav from "./Nav";
 
-import lagmon from "../../assets/images/lagmon.png";
+import lagmon from "@/assets/images/lagmon.png";
 
 function convertNumber(alphaNum) {
   alphaNum = alphaNum.split("");
@@ -190,12 +191,12 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     ]);
   }
 
-  function handleFoodNote(e, ind) {
+  function handleFoodNote(text, ind) {
     setFoodLst([
       ...foodLst.slice(0, ind),
       {
         ...foodLst[ind],
-        note: e.target.value,
+        note: text,
       },
       ...foodLst.slice(ind + 1),
     ]);
@@ -209,6 +210,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
         open={open}
         className="!bg-[#1f1d2b] text-md !text-white"
         title="Orders #34562"
+        width={"30rem"}
       >
         <div className="relative !h-[57vh] overflow-auto pb-8">
           {/* Buttons */}
@@ -230,9 +232,9 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             ))}
           </Flex>
 
-          {/* Dice In contents */}
+          {/* Din In contents */}
           {!btnInd && (
-            <div className="drawer__content mt-4 absolute top-6">
+            <div className="drawer__content absolute top-16 w-full">
               <div className="flex-outer pr-4 flex gap-4 text-[1rem]">
                 <div className="col-first w-[85%]">
                   <div className="flex-inner flex justify-between gap-4">
@@ -249,19 +251,17 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               {foodLst.map((item, ind) => (
                 <div
                   key={ind}
-                  className="food-card mt-2 px-4 py-4 rounded-[8px] shadow-food-card"
+                  className="food-card mt-2 px-4 py-4 rounded-[8px] duration-400 hover:shadow-food-card"
                 >
-                  {ind}
-
                   <div className="flex-outer flex items-center gap-4 text-[1rem]">
                     <div className="col-first w-[85%]">
                       <div className="flex-inner flex justify-between items-center gap-4">
-                        <div className="food-card__desc w-[80%] flex items-center gap-2">
+                        <div className="food-card__desc w-[80%] flex items-center gap-[1rem]">
                           <img
                             src={item.image}
                             className="food-card__image h-14 w-14 rounded-full object-cover object-center"
                           />
-                          <div className="food-card__info flex flex-col justify-between text-[0.8rem]">
+                          <div className="food-card__info flex flex-col justify-between text-[0.95rem]">
                             <div className="food-card__name">
                               Spicy seasoned sea...
                             </div>
@@ -270,12 +270,12 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                             </div>
                           </div>
                         </div>
-                        <div className="col-inner-second aspect-square w-[20%] h-fit px-2 py-2 rounded-[8px] border-[1px] border-[#393C49] flex items-center justify-center text-[0.9rem]">
+                        <div className="col-inner-second aspect-square w-[20%] h-fit px-2 py-2 rounded-[8px] border-[1px] border-[#393C49] bg-[#2D303E] flex items-center justify-center text-[1.1rem]">
                           {item.quantity}
                         </div>
                       </div>
                     </div>
-                    <div className="col-second w-[15%] flex justify-center text-center text-[0.9rem]">
+                    <div className="col-second w-[15%] flex justify-center text-center text-[1.1rem]">
                       $ {convertNumber(item.price) * item.quantity}
                     </div>
                   </div>
@@ -285,12 +285,14 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                         type="text"
                         placeholder="Please, just a little bit spicy only."
                         value={item.note || ""}
-                        className="w-full rounded-[8px] border-[1px] border-[#393C49] px-4 py-2 bg-[#2D303E] outline-none placeholder:text-white"
-                        onChange={(e) => handleFoodNote(e, ind)}
+                        className="rounded-[8px] outline-none border-[1px] border-[#393C49] w-full !h-full px-4 py-[1rem] bg-[#2D303E] flex items-center font-[400] text-[1rem]"
+                        onChange={(e) => handleFoodNote(e.target.value, ind)}
                       />
                     </div>
                     <div className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:bg-black">
-                      <i className="fa-solid fa-trash"></i>
+                      <DeleteOutlined
+                        onClick={(e) => handleFoodNote("", ind)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -301,15 +303,15 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
 
         {/*  food cards footer */}
         <div className="drawer__footer absolute left-6 right-6 bottom-0 pt-6 pb-4 border-t-2 border-t-[#393C49] !bg-[#1F1D2B] z-[1] !text-[1.2rem]">
-          <div className="flex-discount flex flex-wrap justify-between items-center gap-4">
+          <div className="flex-discount flex flex-wrap justify-between items-center gap-4 font-[400]">
             <span className="block text-[#ABBBC2] text-[1rem]">Discount</span>
             <span className="block">$0</span>
           </div>
-          <div className="flex-subtotal mt-4 flex flex-wrap justify-between items-center gap-4">
+          <div className="flex-subtotal mt-4 flex flex-wrap justify-between items-center gap-4 font-[400]">
             <span className="block text-[#ABBBC2] text-[1rem]">Sub total</span>
-            <span className="block">${total}</span>
+            <span className="block">$ {total}</span>
           </div>
-          <button className="mt-10 w-full rounded-[8px] py-4 bg-[#EA7C69] text-[1rem]">
+          <button className="mt-10 mb-4 w-full rounded-[8px] py-4 bg-[#EA7C69] text-[1rem] shadow-sidebar-effect">
             Continue to Payment
           </button>
         </div>
@@ -325,13 +327,13 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               <i className="fa-solid fa-angle-down"></i>
             </span>
             <select>
-              <option value="lorem">Lorem</option>
+              <option value="dine-in">Dine In</option>
             </select>
           </div>
         </div>
       )}
       {/* Foods Cards on content side */}
-      <div className="w-full flex flex-wrap gap-[4rem_5rem]">
+      <div className="w-full flex flex-wrap gap-[2rem_3rem]">
         {foodLst.map((item, ind) => (
           <div
             key={ind}
