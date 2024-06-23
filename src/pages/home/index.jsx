@@ -1,8 +1,8 @@
-import FoodList from "@/components/FoodList";
+import FoodList from "@/components/FoodList/FoodList";
 function Home() {
   return (
     <div>
-      <FoodList seenFoodNav={true} seenFoodFilter={false} />
+      <FoodList seenFoodNav={true} seenFoodFilter={true} />
     </div>
   );
 }
