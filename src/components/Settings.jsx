@@ -100,7 +100,7 @@ function Settings() {
     // console.log(linksSettings, ind);
 
     setLinksSettings(
-      linksSettings.map((item, id) => ({
+      linksSettings?.map((item, id) => ({
         ...item,
         selected: !item.selected && ind === id,
       }))
@@ -110,7 +110,7 @@ function Settings() {
   // Handling Nav states
   const handleNavLinkClick = (ind) => {
     setNavLinks(
-      navLinks.map((item, id) => ({
+      navLinks?.map((item, id) => ({
         ...item,
         selected: id === ind,
       }))
@@ -207,7 +207,7 @@ function Settings() {
       <div className="mt-8 h-[86vh] w-[100%] flex justify-between gap-4 text-white">
         {/* settings bar */}
         <div className="settings__bar rounded-md w-[22%] bg-[#1f1d2b]">
-          {linksSettings.map((item, ind) => (
+          {linksSettings?.map((item, ind) => (
             <div
               key={ind}
               className={clsx(
@@ -249,7 +249,7 @@ function Settings() {
               </div>
               {/* settings content navbar  */}
               <div className={clsx("mt-[1.2rem] flex gap-8 flex-wrap")}>
-                {navLinks.map((item, index) => (
+                {navLinks?.map((item, index) => (
                   <div
                     key={index}
                     to={item.to || "#"}
@@ -281,7 +281,7 @@ function Settings() {
                       </span>
                       <span className="text-[1.3rem]">Add new dish</span>
                     </div>
-                    {foodList.map((item) => (
+                    {foodList?.map((item) => (
                       <div key={item.id} className="food-card--lg">
                         <div className="card-content">
                           <img src={item.image} className="food-card__image" />
