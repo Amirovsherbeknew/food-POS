@@ -161,7 +161,23 @@ function Settings() {
       }
     });
   };
-
+  const getFoodList = async () => {
+    try {
+      const response = await axios({
+        url:'https://all-in-one-recipe-api.p.rapidapi.com/categories/chicken',
+        method:"GET",
+        headers: {
+          'Content-Type':null,
+          'Accept':'application/json',
+          'x-rapidapi-host': 'all-in-one-recipe-api.p.rapidapi.com',
+	        'x-rapidapi-key': '7533d54e18msh86206cd27fffb17p1dd9e0jsne4f96fea8dbf'
+        }
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     (async function () {
       const res = await axios.get("http://localhost:3000/foods");
@@ -183,7 +199,9 @@ function Settings() {
     };
     handleValidate();
   }, [foodImage]);
-
+  useEffect(() => {
+    getFoodList()
+  },[])
   return (
     <>
       <div className="mt-8 h-[86vh] w-[100%] flex justify-between gap-4 text-white">
