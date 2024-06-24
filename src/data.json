@@ -1,6 +1,138 @@
 {
   "title": {
     "/": "Jaegar Resto",
-    "/dashboard": "Dashboard"
+    "/dashboard": "Dashboard",
+    "/settings": "Settings"
+  },
+  "seenDate": {
+    "/": true,
+    "/dashboard": true,
+    "/settings": false
+  },
+  "seenSearch": {
+    "/": true,
+    "/dashboard": false,
+    "/settings": false
+  },
+  "foods": {
+    "hot-dishes": [
+      {
+        "id": 1,
+        "image": "/src/assets/images/lagmon.png",
+        "name": "Spicy seasoned seafood noodles",
+        "price": "2.29",
+        "available": "20 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 2,
+        "image": "/src/assets/images/macaron.png",
+        "name": "Salted Pasta with mushroom sauce",
+        "price": "2.69",
+        "available": "11 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 3,
+        "image": "/src/assets/images/ramen.png",
+        "name": "Beef dumpling in hot and sour soup",
+        "price": "2.99",
+        "available": "16 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 4,
+        "image": "/src/assets/images/rollton.png",
+        "name": "Healthy noodle with spinach leaf",
+        "price": "3.29",
+        "available": "22 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 5,
+        "image": "/src/assets/images/rollton_egg.png",
+        "name": "Hot spicy fried rice with omelet",
+        "price": "3.29",
+        "available": "13 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 6,
+        "image": "/src/assets/images/xinkali.png",
+        "name": "Spicy instant noodle with special omelette",
+        "price": "3.59",
+        "available": "17 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 7,
+        "image": "/src/assets/images/lagmon.png",
+        "name": "Spicy seasoned seafood noodles",
+        "price": "2.29",
+        "available": "20 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 8,
+        "image": "/src/assets/images/macaron.png",
+        "name": "Salted Pasta with mushroom sauce",
+        "price": "2.69",
+        "available": "11 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 9,
+        "image": "/src/assets/images/ramen.png",
+        "name": "Beef dumpling in hot and sour soup",
+        "price": "2.99",
+        "available": "16 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 10,
+        "image": "/src/assets/images/rollton.png",
+        "name": "Healthy noodle with spinach leaf",
+        "price": "3.29",
+        "available": "22 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 11,
+        "image": "/src/assets/images/rollton_egg.png",
+        "name": "Hot spicy fried rice with omelet",
+        "price": "3.29",
+        "available": "13 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 12,
+        "image": "/src/assets/images/xinkali.png",
+        "name": "Spicy instant noodle with special omelette",
+        "price": "3.59",
+        "available": "17 Bowls available",
+        "quantity": 0,
+        "note": ""
+      },
+      {
+        "id": 13,
+        "image": "/src/assets/images/lagmon.png",
+        "name": "Spicy seasoned seafood noodles",
+        "price": "2.29",
+        "available": "20 Bowls available",
+        "quantity": 0,
+        "note": ""
+      }
+    ]
   }
 }
