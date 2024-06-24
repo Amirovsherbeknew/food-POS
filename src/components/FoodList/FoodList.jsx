@@ -4,7 +4,7 @@ import { Drawer, Flex } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useForm } from "react-hook-form";
 import { withMask, useHookFormMask } from "use-mask-input";
-import Nav from "./Nav";
+import Nav from "@/components/Nav";
 
 import lagmon from "@/assets/images/lagmon.png";
 import macaron from "@/assets/images/macaron.png";
