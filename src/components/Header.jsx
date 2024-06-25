@@ -2,8 +2,9 @@ import jsonData from "@/data.json";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-function Header({ children, style = {} }) {
+function Header() {
   const location = useLocation();
+  const [searchText, setSearchText] = useState("");
   const [pageTitle, setPageTitle] = useState(jsonData.title[location.pathname]);
   const [seenDate, setSeenDate] = useState(
     jsonData.seenDate[location.pathname]
@@ -17,10 +18,7 @@ function Header({ children, style = {} }) {
   const date = new Date();
 
   return (
-    <div
-      className="flex justify-between items-center flex-wrap gap-[1.5rem]"
-      style={style}
-    >
+    <div className="flex justify-between items-center flex-wrap gap-[1.5rem]">
       <div>
         <span className="text-lg text-white">{pageTitle}</span>
         {seenDate && (
@@ -29,7 +27,16 @@ function Header({ children, style = {} }) {
           </span>
         )}
       </div>
-      {children}
+      {!['/'].includes(location.pathname) || <div className="search-input">
+        <i className="fa-solid fa-magnifying-glass text-white"></i>
+        <input
+          type="text"
+          onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
+          placeholder="Search for food, coffe, etc.."
+        />
+      </div> }
+      
     </div>
   );
 }
