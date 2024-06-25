@@ -128,9 +128,11 @@ function Settings() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(foodName);
-    console.log(foodPrice);
-    console.log(foodImage);
+
+    // console.log(foodName);
+    // console.log(foodPrice);
+    // console.log(foodImage);
+
     setfoodList((prevFoodList) => {
       const newFoodList = [
         ...prevFoodList,
@@ -144,6 +146,7 @@ function Settings() {
           note: "",
         },
       ];
+
       setFoodName("");
       setFoodPrice("");
       setFoodImage("");
@@ -152,7 +155,7 @@ function Settings() {
         const res = axios.put("http://localhost:3000/foods", {
           "hot-dishes": newFoodList,
         });
-        console.log("Data come:", res.data);
+        // console.log("Data come:", res.data);
       } catch (err) {
         alert(err.message);
       } finally {
@@ -172,7 +175,7 @@ function Settings() {
   useEffect(() => {
     const handleValidate = async () => {
       try {
-        console.log(foodList);
+        // console.log(foodList);
         await validateImageUrl(foodImage);
         setValidImage(true);
         setErrorMessage("");
