@@ -4,7 +4,11 @@ import { Link, useLocation } from "react-router-dom";
 
 function Sidebar() {
   const [linkObjects, setLinkObjects] = useState([
-    { selected: false, element: <i className="fa-solid fa-shop"></i> },
+    {
+      link: "/home",
+      selected: false,
+      element: <i className="fa-solid fa-shop"></i>,
+    },
     {
       link: "/",
       selected: true,

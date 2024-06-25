@@ -20,7 +20,8 @@
     "react-router-dom": "^6.23.1",
     "sass": "^1.77.6",
     "use-mask-input": "^3.3.8",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
