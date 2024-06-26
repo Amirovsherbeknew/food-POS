@@ -12,6 +12,7 @@ function Routes() {
           path: "/",
           element: <Layout />,
           children: [
+            { path: "/home", element: <Home /> },
             { path: "/", element: <Home /> },
             { path: "dashboard", element: <Dashboard /> },
             { path: "settings", element: <Settings /> },
