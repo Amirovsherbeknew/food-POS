@@ -14,6 +14,7 @@ import useProductStore from "@/store/store";
 
 import Nav from "@/components/Nav";
 import PaymentForm from "../paymentForm";
+import FoodCardImage from "../FoodCardImage";
 
 function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Buttons state
@@ -58,7 +59,21 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Foods select text state updater
   const handleSelectText = useProductStore((state) => state.handleSelectText);
   // Foods filtering due to filter text in search input
-  const filterFoods = useProductStore((state) => state.filterFoods);
+  const filterFoods = (text) => {
+    const foods = foodList;
+    // console.log("Foods get", foods);
+    const textLowered = text.toLowerCase();
+    const foodsFiltered = foods.filter((foodItem) => {
+      for (const word of foodItem.name.split(" ")) {
+        const wordLowered = word.toLowerCase();
+        if (wordLowered.startsWith(textLowered)) {
+          return true;
+        }
+      }
+      return false;
+    });
+    return foodsFiltered;
+  };
 
   // Total price
   const total = useProductStore((state) => state.total);
@@ -414,21 +429,8 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               setOpen(true);
             }}
           >
-            {/* {(
-              <LazyLoadImage
-                src={item.image}
-                alt={item.name}
-                effect="blur"
-                wrapperProps={{
-                  style: { transitionDelay: "0.5s" },
-                }}
-                onLoad={(e) => {
-                  handleFoodListLoaded(item.id);
-                  e.target.value.style.display = "none";
-                }}
-              />
-            ) || <Image width={200} src={item.image} alt={item.name} />} */}
-            {item.isLoaded ? (
+            <FoodCardImage item={item} />
+            {/* {item.isLoaded ? (
               <Image
                 width={200}
                 src={item.image}
@@ -447,7 +449,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                 onLoad={() => handleFoodListLoaded(item.id)}
                 onClick={(e) => e.stopPropagation()}
               />
-            )}
+            )} */}
             <div className="food-name">{item.name}</div>
             <div className="food-price">{item.price}</div>
             <div className="food-available">{item.available}</div>

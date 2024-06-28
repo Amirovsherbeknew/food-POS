@@ -16,22 +16,6 @@ const useProductStore = create((set, get) => ({
       selectText: text,
     }));
   },
-  filterFoods: (text) => {
-    const foods = get().foodList;
-    // console.log("Foods get", foods);
-    const textLowered = text.toLowerCase();
-    const foodsFiltered = foods.filter((foodItem) => {
-      for (const word of foodItem.name.split(" ")) {
-        const wordLowered = word.toLowerCase();
-        if (wordLowered.startsWith(textLowered)) {
-          return true;
-        }
-      }
-      return false;
-    });
-
-    return foodsFiltered;
-  },
   selectedFood: [],
   foodList: [
     {
@@ -42,7 +26,6 @@ const useProductStore = create((set, get) => ({
       available: "20 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 2,
@@ -52,7 +35,6 @@ const useProductStore = create((set, get) => ({
       available: "11 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 3,
@@ -62,7 +44,6 @@ const useProductStore = create((set, get) => ({
       available: "16 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 4,
@@ -72,7 +53,6 @@ const useProductStore = create((set, get) => ({
       available: "22 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 5,
@@ -82,7 +62,6 @@ const useProductStore = create((set, get) => ({
       available: "13 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 6,
@@ -92,7 +71,6 @@ const useProductStore = create((set, get) => ({
       available: "17 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 7,
@@ -102,7 +80,6 @@ const useProductStore = create((set, get) => ({
       available: "20 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 8,
@@ -112,7 +89,6 @@ const useProductStore = create((set, get) => ({
       available: "11 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 9,
@@ -122,7 +98,6 @@ const useProductStore = create((set, get) => ({
       available: "16 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 10,
@@ -132,7 +107,6 @@ const useProductStore = create((set, get) => ({
       available: "22 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 11,
@@ -142,7 +116,6 @@ const useProductStore = create((set, get) => ({
       available: "13 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 12,
@@ -152,7 +125,6 @@ const useProductStore = create((set, get) => ({
       available: "17 Bowls available",
       quantity: 0,
       note: "",
-      isLoaded: false,
     },
     {
       id: 13,
@@ -165,19 +137,6 @@ const useProductStore = create((set, get) => ({
       isLoaded: false,
     },
   ],
-  handleFoodListLoaded: (id) => {
-    set((state) => ({
-      foodList: state.foodList.map((foodItem) => {
-        if (foodItem.id !== id) {
-          return foodItem;
-        }
-        return {
-          ...foodItem,
-          isLoaded: true,
-        };
-      }),
-    }));
-  },
   addFoodItem: (obj) => {
     const newFoodItem = {
       ...obj,
