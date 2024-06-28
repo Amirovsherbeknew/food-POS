@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { v4 as uuidv4 } from "uuid";
 
 import lagmon from "@/assets/images/lagmon.png";
 import macaron from "@/assets/images/macaron.png";
@@ -129,6 +130,34 @@ const useProductStore = create((set) => ({
       note: "",
     },
   ],
+  selectText: "",
+  handleSelectText: (text) => {
+    set((state) => ({
+      selectText: text,
+    }));
+  },
+  addFoodItem: (obj) => {
+    const newFoodItem = {
+      ...obj,
+      id: uuidv4(),
+      available: "20 Bowls available",
+      quantity: 0,
+      note: "",
+    };
+    set((state) => ({
+      foodList: state.foodList.concat(newFoodItem),
+    }));
+  },
+  updateFoodItem: (obj) => {
+    set((state) => ({
+      foodList: state.foodList.map((foodItem) => {
+        if (foodItem.id !== obj.id) {
+          return foodItem;
+        }
+        return obj;
+      }),
+    }));
+  },
   viewSelectProduct: (id) => {
     set((state) => {
       const newFoodList = state.foodList.map((item) => {

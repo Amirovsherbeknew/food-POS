@@ -372,6 +372,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             size="large"
             defaultValue="dine-in"
             className="custom-select"
+            popupClassName="bg-[#1f1d2b] !text-white"
             options={[
               { value: "dine-in", label: "Dine In" },
               { value: "to-go", label: "To Go" },
