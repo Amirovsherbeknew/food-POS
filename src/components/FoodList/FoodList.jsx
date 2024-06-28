@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { withMask, useHookFormMask } from "use-mask-input";
+
 import clsx from "clsx";
-import { Select, Drawer, Flex } from "antd";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+
+import { Select, Drawer, Flex, Image } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 import useProductStore from "@/store/store";
@@ -41,6 +46,19 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
 
   // Foods state
   const foodList = useProductStore((state) => state.foodList);
+  // Foods image isLoad state updater
+  const handleFoodListLoaded = useProductStore(
+    (state) => state.handleFoodListLoaded
+  );
+  // Foods filtering state updater
+  const [foodListFiltered, setFoodListFiltered] = useState(foodList);
+
+  // Foods filter text in search input
+  const selectText = useProductStore((state) => state.selectText);
+  // Foods select text state updater
+  const handleSelectText = useProductStore((state) => state.handleSelectText);
+  // Foods filtering due to filter text in search input
+  const filterFoods = useProductStore((state) => state.filterFoods);
 
   // Total price
   const total = useProductStore((state) => state.total);
@@ -134,6 +152,10 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       onChildrenClose();
     }
   }, [total]);
+
+  useEffect(() => {
+    setFoodListFiltered(filterFoods(selectText));
+  }, [selectText]);
 
   return (
     <>
@@ -383,7 +405,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       )}
       {/* Foods Cards on content side */}
       <div className="w-full flex flex-wrap gap-[2rem_3rem]">
-        {foodList.map((item, ind) => (
+        {foodListFiltered?.map((item, ind) => (
           <div
             key={ind}
             className="food-card--sm cursor-pointer !text-white"
@@ -392,7 +414,40 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               setOpen(true);
             }}
           >
-            <img src={item.image} />
+            {/* {(
+              <LazyLoadImage
+                src={item.image}
+                alt={item.name}
+                effect="blur"
+                wrapperProps={{
+                  style: { transitionDelay: "0.5s" },
+                }}
+                onLoad={(e) => {
+                  handleFoodListLoaded(item.id);
+                  e.target.value.style.display = "none";
+                }}
+              />
+            ) || <Image width={200} src={item.image} alt={item.name} />} */}
+            {item.isLoaded ? (
+              <Image
+                width={200}
+                src={item.image}
+                alt={item.name}
+                onClick={(e) => e.stopPropagation()}
+                className="rounded-full"
+              />
+            ) : (
+              <LazyLoadImage
+                src={item.image}
+                alt={item.name}
+                effect="blur"
+                wrapperProps={{
+                  style: { transitionDelay: "0.5s" },
+                }}
+                onLoad={() => handleFoodListLoaded(item.id)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
             <div className="food-name">{item.name}</div>
             <div className="food-price">{item.price}</div>
             <div className="food-available">{item.available}</div>

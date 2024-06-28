@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useHookFormMask } from "use-mask-input";
@@ -6,6 +7,8 @@ import { useHookFormMask } from "use-mask-input";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 import useProductStore from "../store/store";
 import Nav from "@/components/Nav";
@@ -18,7 +21,7 @@ import {
 } from "@ant-design/icons";
 
 import filterIcon from "../assets/icons/filter.png";
-import Spinner from "../animations";
+import Spinner from "../animations/Spinner";
 
 // Settings content Nav Links
 const navLinks = [
@@ -101,7 +104,15 @@ function Settings() {
             {foodList?.map((item) => (
               <div key={item.id} className="food-card--lg">
                 <div className="card-content">
-                  <img src={item.image} className="food-card__image" />
+                  <LazyLoadImage
+                    src={item.image}
+                    effect="blur"
+                    className="food-card__image"
+                    wrapperProps={{
+                      // If you need to, you can tweak the effect transition using the wrapper style.
+                      style: { transitionDelay: "0.5s" },
+                    }}
+                  />
                   <div className="food-card__title !text-white">
                     {item.name}
                   </div>
@@ -143,19 +154,30 @@ function Settings() {
             {isLoading ? (
               <Spinner />
             ) : errorMessage ? (
-              <h1 className="text-red-600 text-[4rem] font-bold">
+              <h1 className="text-[#ea7c69] text-[4rem] font-bold">
                 {errorMessage}
               </h1>
             ) : (
               <div className="max-h-[60vh] overflow-auto p-4 grid grid-cols-3 gap-x-4 gap-y-6">
-                {datas?.meals?.map((mealObj) => (
+                {datas?.meals?.map((mealObj, ind) => (
                   <>
-                    <div className="datameal-card text-center">
+                    <div className="datameal-card text-center" key={ind}>
                       <div className="flex items-center justify-center">
-                        <img
+                        {/* <LazyLoadImage
                           src={mealObj?.strMealThumb}
-                          className="max-w-[100%] max-h-[100%]"
                           alt={mealObj?.strMeal + " food"}
+                          className="max-w-[100%] max-h-[100%]"
+                          effect="blur"
+                          wrapperProps={{
+                            // If you need to, you can tweak the effect transition using the wrapper style.
+                            style: { transitionDelay: "1s" },
+                          }}
+                        /> */}
+                        <LazyLoadImage
+                          src={mealObj?.strMealThumb}
+                          alt={mealObj?.strMeal + " food"}
+                          className="max-w-[100%] max-h-[100%]"
+                          effect="blur"
                         />
                       </div>
                       <div className="text-[#ea7c69] mt-4 text-center font-semibold text-xl">
@@ -285,8 +307,8 @@ function Settings() {
     setIsLoading(true);
     try {
       const res = await axios.request(options);
-      console.log("Url", options.url);
-      console.log("Response", res);
+      // console.log("Url", options.url);
+      // console.log("Response", res);
       if (res.data) {
         setDatas(res.data);
       } else {
@@ -302,6 +324,7 @@ function Settings() {
       } else {
         const timeout = setTimeout(() => {
           setIsLoading(false);
+          clearTimeout(timeout);
         }, (1 - diff) * 1000);
       }
     }
@@ -533,7 +556,7 @@ function Settings() {
                   className="mt-8 h-[25vh] object-cover object-center"
                 />
               ) : (
-                <p className="text-[red] mt-4 font-[600]">{errorMessage}</p>
+                <p className="text-[red] mt-4 font-[600]">{imageError}</p>
               )}
               <button
                 type="submit"
