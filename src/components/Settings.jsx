@@ -1,20 +1,177 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import clsx from "clsx";
+import { useForm } from "react-hook-form";
+import { useHookFormMask } from "use-mask-input";
+
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import clsx from "clsx";
+
+import useProductStore from "../store/store";
+import Nav from "@/components/Nav";
+
+import { Tabs } from "antd";
 import {
   ShopOutlined,
   UnlockOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
 
-import Nav from "@/components/Nav";
-
 import filterIcon from "../assets/icons/filter.png";
+import Spinner from "../animations";
+
+// Settings content Nav Links
+const navLinks = [
+  {
+    to: "#",
+    value: "Hot Dishes",
+  },
+  {
+    to: "#",
+    value: "Cold Dishes",
+  },
+  {
+    to: "#",
+    value: "Soup",
+  },
+  {
+    to: "#",
+    value: "Grill",
+  },
+  {
+    to: "#",
+    value: "Appetizer",
+  },
+  {
+    to: "#",
+    value: "Dessert",
+  },
+  {
+    to: "#",
+    value: "Foods for specific ingredients",
+  },
+];
 
 function Settings() {
   const ref = useRef();
+
+  // Foods state
+  const foodList = useProductStore((state) => state.foodList);
+  // Food add function
+  const addFoodItem = useProductStore((state) => state.addFoodItem);
+  // Food update function
+  const updateFood = useProductStore((state) => state.updateFoodItem);
+
+  // Update item object
+  const [updateFoodItem, setUpdateFoodItem] = useState(null);
+
+  // Nav active tab key
+  const [key, setKey] = useState(null);
+
+  // Text in search
+  const selectText = useProductStore((state) => state.selectText);
+  const [datas, setDatas] = useState([]);
+  // Error message for fetch
+  const [errorMessage, setErrorMessage] = useState("");
+  // Loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Nav Items
+  const items = navLinks.map((navLinkItem, ind) => ({
+    key: String(ind),
+    label: (
+      <Link to="#" className="!text-inherit">
+        {navLinkItem.value}
+      </Link>
+    ),
+    children:
+      ind === 0 ? (
+        <div className="food-cards-wrapper h-[63vh] overflow-y-auto mt-4">
+          <div className="food-cards grid grid-cols-3 gap-x-4 gap-y-6 px-4 py-4">
+            <div
+              key={uuidv4()}
+              className="food-card-add h-[23.5rem] border-[#ea7c69] border-[1px] border-dashed rounded-[10px] flex flex-col justify-center items-center gap-4 text-[#EA7C69] font-[600] cursor-pointer duration-500 hover:translate-y-[-0.6rem]"
+              onClick={() => setIsOpenModal(true)}
+            >
+              <span className="block text-md">
+                <i className="fa-solid fa-plus"></i>
+              </span>
+              <span className="text-[1.3rem]">Add new dish</span>
+            </div>
+            {foodList?.map((item) => (
+              <div key={item.id} className="food-card--lg">
+                <div className="card-content">
+                  <img src={item.image} className="food-card__image" />
+                  <div className="food-card__title !text-white">
+                    {item.name}
+                  </div>
+                  <div className="food-card__num-infos">
+                    <div className="col ">$ {item.price}</div>
+                    <div className="col text-[0.5rem] !text-white">
+                      <i className="fa-solid fa-circle"></i>
+                    </div>
+                    <div className="col">20 Bowls</div>
+                  </div>
+                </div>
+                <div
+                  className="card-edit"
+                  onClick={() => {
+                    setUpdateFoodItem((prevItem) => item);
+                    setFoodName((name) => item.name);
+                    setFoodPrice((price) => item.price);
+                    setFoodImage((image) => item.image);
+                    setIsOpenModal(true);
+                  }}
+                >
+                  <div
+                    className="card-edit__text"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span>
+                      <i className="fa-regular fa-pen-to-square"></i>
+                    </span>
+                    <span>Edit Dish</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : ind === 6 ? (
+        <>
+          <div className="my-8 text-white flex justify-center items-center">
+            {isLoading ? (
+              <Spinner />
+            ) : errorMessage ? (
+              <h1 className="text-red-600 text-[4rem] font-bold">
+                {errorMessage}
+              </h1>
+            ) : (
+              <div className="max-h-[60vh] overflow-auto p-4 grid grid-cols-3 gap-x-4 gap-y-6">
+                {datas?.meals?.map((mealObj) => (
+                  <>
+                    <div className="datameal-card text-center">
+                      <div className="flex items-center justify-center">
+                        <img
+                          src={mealObj?.strMealThumb}
+                          className="max-w-[100%] max-h-[100%]"
+                          alt={mealObj?.strMeal + " food"}
+                        />
+                      </div>
+                      <div className="text-[#ea7c69] mt-4 text-center font-semibold text-xl">
+                        {mealObj?.strMeal}
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <></>
+      ),
+  }));
 
   // Settings Bar states
   const [linksSettings, setLinksSettings] = useState([
@@ -56,44 +213,23 @@ function Settings() {
     },
   ]);
 
-  // Settings content Nav states
-  const [navLinks, setNavLinks] = useState([
-    {
-      selected: false,
-      value: "Hot Dishes",
-    },
-    {
-      selected: false,
-      value: "Cold Dishes",
-    },
-    {
-      selected: false,
-      value: "Soup",
-    },
-    {
-      selected: false,
-      value: "Grill",
-    },
-    {
-      selected: false,
-      value: "Appetizer",
-    },
-    {
-      selected: false,
-      to: "#",
-      value: "Dessert",
-    },
-  ]);
-
-  // Foods state
-  const [foodList, setfoodList] = useState([]);
-
   const [isOpenModal, setIsOpenModal] = useState(false);
+
   const [foodName, setFoodName] = useState("");
+
   const [foodPrice, setFoodPrice] = useState(0);
+
   const [foodImage, setFoodImage] = useState("");
   const [validImage, setValidImage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [imageError, setImageError] = useState("");
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   // Handling Bar states
   const handleLinkClick = (ind) => {
@@ -107,16 +243,7 @@ function Settings() {
     );
   };
 
-  // Handling Nav states
-  const handleNavLinkClick = (ind) => {
-    setNavLinks(
-      navLinks?.map((item, id) => ({
-        ...item,
-        selected: id === ind,
-      }))
-    );
-  };
-
+  // Checking wheter image url is valid or not
   const validateImageUrl = (url) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -126,67 +253,59 @@ function Settings() {
     });
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
-    // console.log(foodName);
-    // console.log(foodPrice);
-    // console.log(foodImage);
-
-    setfoodList((prevFoodList) => {
-      const newFoodList = [
-        ...prevFoodList,
-        {
-          id: uuidv4(),
-          image: foodImage,
-          name: foodName,
-          price: String(foodPrice),
-          available: "20 Bowls available",
-          quantity: 0,
-          note: "",
-        },
-      ];
+  // Submitting form
+  const handleFormSubmit = async (data) => {
+    if (foodName.trim() && foodPrice.trim() && validImage) {
+      updateFoodItem
+        ? updateFood({ ...updateFoodItem, ...data })
+        : addFoodItem(data);
+      setIsOpenModal(false);
+      alert(
+        "Food product was successfully " +
+          (updateFoodItem ? "updated" : "added")
+      );
 
       setFoodName("");
-      setFoodPrice("");
+      setFoodPrice(0);
       setFoodImage("");
-
-      try {
-        const res = axios.put("http://localhost:3000/foods", {
-          "hot-dishes": newFoodList,
-        });
-        // console.log("Data come:", res.data);
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        setIsOpenModal(false);
-        return newFoodList;
-      }
-    });
-  };
-  const getFoodList = async () => {
-    try {
-      const response = await axios({
-        url:'https://all-in-one-recipe-api.p.rapidapi.com/categories/chicken',
-        method:"GET",
-        headers: {
-          'Content-Type':null,
-          'Accept':'application/json',
-          'x-rapidapi-host': 'all-in-one-recipe-api.p.rapidapi.com',
-	        'x-rapidapi-key': '7533d54e18msh86206cd27fffb17p1dd9e0jsne4f96fea8dbf'
-        }
-      })
-      console.log(response)
-    } catch (error) {
-      console.log(error)
+      reset();
+    } else {
+      alert("Food name, price, or image is invalid");
     }
-  }
-  useEffect(() => {
-    (async function () {
-      const res = await axios.get("http://localhost:3000/foods");
-      setfoodList(res.data["hot-dishes"]);
-    })();
-  }, []);
+  };
+
+  const BASE_URL = "https://www.themealdb.com/api/json/v1/1/search.php?f=";
+  const getFoodList = async () => {
+    console.log("Get Food List Fetch");
+    const options = {
+      method: "get",
+      url: BASE_URL + selectText,
+    };
+    const prevTimestamp = Date.now() / 1000;
+    setIsLoading(true);
+    try {
+      const res = await axios.request(options);
+      console.log("Url", options.url);
+      console.log("Response", res);
+      if (res.data) {
+        setDatas(res.data);
+      } else {
+        setErrorMessage("Nothing has come, try again!!!");
+      }
+    } catch (err) {
+      setErrorMessage(err.message);
+    } finally {
+      const currTimestamp = Date.now() / 1000;
+      const diff = currTimestamp - prevTimestamp;
+      if (diff > 1) {
+        setIsLoading(false);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsLoading(false);
+        }, (1 - diff) * 1000);
+      }
+    }
+  };
 
   useEffect(() => {
     const handleValidate = async () => {
@@ -194,17 +313,20 @@ function Settings() {
         // console.log(foodList);
         await validateImageUrl(foodImage);
         setValidImage(true);
-        setErrorMessage("");
+        setImageError("");
       } catch (error) {
         setValidImage(false);
-        setErrorMessage(error.message);
+        setImageError(error.message);
       }
     };
     handleValidate();
   }, [foodImage]);
+
   useEffect(() => {
-    getFoodList()
-  },[])
+    setErrorMessage("");
+    getFoodList();
+  }, [selectText]);
+
   return (
     <>
       <div className="mt-8 h-[86vh] w-[100%] flex justify-between gap-4 text-white">
@@ -250,8 +372,21 @@ function Settings() {
                   </span>
                 </div>
               </div>
-              {/* settings content navbar  */}
-              <div className={clsx("mt-[1.2rem] flex gap-8 flex-wrap")}>
+
+              {/* settings content navbar newer version using ant design tabs  */}
+              <Tabs
+                defaultActiveKey="1"
+                items={items}
+                onChange={(key) => {
+                  console.log(key);
+                  setKey(key);
+                }}
+                tabBarStyle={{ color: "white !important", fontWeight: "500" }}
+              ></Tabs>
+              <hr />
+
+              {/* settings content navbar previous version  */}
+              {/* <div className={clsx("mt-[1.2rem] flex gap-8 flex-wrap")}>
                 {navLinks?.map((item, index) => (
                   <div
                     key={index}
@@ -262,16 +397,16 @@ function Settings() {
                       "hover:text-[#ea7c69] hover:after:w-[70%]",
                       item.selected && "!text-[#ea7c69] after:w-[70%]"
                     )}
-                    onClick={() => handleNavLinkClick(index)}
                   >
                     {item.value}
                   </div>
                 ))}
               </div>
-              <hr />
+              <hr /> */}
 
               {/* Food cards */}
-              {navLinks[0].selected && (
+
+              {/* {navLinks[0].selected && (
                 <div className="food-cards-wrapper h-[63vh] overflow-y-auto mt-4">
                   <div className="food-cards grid grid-cols-3 gap-x-4 gap-y-6 px-4 py-4">
                     <div
@@ -309,7 +444,7 @@ function Settings() {
                     ))}
                   </div>
                 </div>
-              )}
+              )} */}
             </>
           )}
         </div>
@@ -320,6 +455,10 @@ function Settings() {
           className="modal-overlay fixed top-0 left-0 w-[100%] h-[100vh] !bg-[rgba(0,0,0,0.5)] !z-10"
           onClick={() => {
             console.log("Overlay closed");
+            setFoodName("");
+            setFoodPrice(0);
+            setFoodImage("");
+            setUpdateFoodItem(null);
             setIsOpenModal(false);
           }}
         >
@@ -331,39 +470,61 @@ function Settings() {
               className="absolute top-[1.5rem] right-[2rem] text-[1.5rem] cursor-pointer"
               onClick={(e) => {
                 console.log("X closed");
+                setFoodName("");
+                setFoodPrice(0);
+                setFoodImage("");
+                setUpdateFoodItem(null);
                 setIsOpenModal(false);
               }}
             >
               <i className="fa-solid fa-xmark"></i>
             </div>
-            <form className="w-full flex flex-col items-center text-center margin-auto">
+            <form
+              onSubmit={handleSubmit(handleFormSubmit)}
+              className="w-full flex flex-col items-center text-center margin-auto"
+            >
               <span className="form-title relative block mt-10 text-[1.8rem] font-[600] text-[#ea7c69] after:block after:content-[' '] after:absolute after:top-[3rem] after:left-[30%] after:w-[40%] after:h-[4px] after:bg-[#ea7c69]">
-                Add Dish
+                {updateFoodItem ? "Update Dish" : "Add Dish"}
               </span>
               <input
                 type="text"
-                name="foodName"
                 value={foodName}
                 placeholder="Food name"
                 className="mt-8 w-full rounded-md px-4 py-2 outline-none border-[1px] border-[#393C49]"
-                onChange={(e) => setFoodName(e.target.value)}
-              />
-              <input
-                type="number"
-                step="0.01"
-                name="foodPrice"
-                value={foodPrice}
-                placeholder="Food price"
-                className="mt-4 w-full rounded-md px-4 py-2 outline-none border-[1px] border-[#393C49]"
-                onChange={(e) => setFoodPrice(e.target.value)}
+                {...register("name", {
+                  required: "Food name is required",
+                  onChange: (e) => {
+                    setValue("name", e.target.value);
+                    setFoodName(e.target.value);
+                  },
+                })}
               />
               <input
                 type="text"
-                name="foodImage"
+                step="0.01"
+                value={foodPrice}
+                placeholder="Food price"
+                className="mt-4 w-full rounded-md px-4 py-2 outline-none border-[1px] border-[#393C49]"
+                {...register("price", {
+                  required: "Food price must be number",
+                  onChange: (e) => {
+                    setValue("price", e.target.value);
+                    setFoodPrice(e.target.value);
+                  },
+                })}
+              />
+              <input
+                type="text"
                 value={foodImage}
                 placeholder="Food Image"
                 className="mt-4 w-full rounded-md px-4 py-2 outline-none border-[1px] border-[#393C49]"
-                onChange={(e) => setFoodImage(e.target.value)}
+                {...register("image", {
+                  required: true,
+                  onChange: (e) => {
+                    setValue("image", e.target.value);
+                    setFoodImage(e.target.value);
+                  },
+                })}
               />
               {validImage ? (
                 <img
@@ -377,9 +538,8 @@ function Settings() {
               <button
                 type="submit"
                 className="mt-4 btn--active w-[60%] shadow-xl !hover:bg-black !text-[1.1rem]"
-                onClick={(e) => handleFormSubmit(e)}
               >
-                Add
+                {updateFoodItem ? "Update" : "Add"}
               </button>
             </form>
           </div>

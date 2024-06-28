@@ -1,10 +1,12 @@
 import jsonData from "@/data.json";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import useProductStore from "../store/store";
 
 function Header() {
   const location = useLocation();
-  const [searchText, setSearchText] = useState("");
+  const selectText = useProductStore((state) => state.selectText);
+  const handleSelectText = useProductStore((state) => state.handleSelectText);
   const [pageTitle, setPageTitle] = useState(jsonData.title[location.pathname]);
   const [seenDate, setSeenDate] = useState(
     jsonData.seenDate[location.pathname]
@@ -27,16 +29,17 @@ function Header() {
           </span>
         )}
       </div>
-      {!['/'].includes(location.pathname) || <div className="search-input">
-        <i className="fa-solid fa-magnifying-glass text-white"></i>
-        <input
-          type="text"
-          onChange={(e) => setSearchText(e.target.value)}
-          value={searchText}
-          placeholder="Search for food, coffe, etc.."
-        />
-      </div> }
-      
+      {["/", "/settings"].includes(location.pathname) && (
+        <div className="search-input">
+          <i className="fa-solid fa-magnifying-glass text-white"></i>
+          <input
+            type="text"
+            onChange={(e) => handleSelectText(e.target.value)}
+            value={selectText}
+            placeholder="Search for food, coffe, etc.."
+          />
+        </div>
+      )}
     </div>
   );
 }
