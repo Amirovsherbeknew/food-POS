@@ -5,18 +5,17 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import useProductStore from "@/store/store";
+import { getBase64 } from "../utils";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
-import useProductStore from "../store/store";
 import { Tabs } from "antd";
 import {
   ShopOutlined,
   UnlockOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
-
-import filterIcon from "../assets/icons/filter.png";
-import Spinner from "../animations/Spinner";
+import filterIcon from "@/assets/icons/filter.png";
+import Spinner from "@/animations/Spinner";
 
 // Settings content Nav Links
 const navLinks = [
@@ -92,51 +91,54 @@ function Settings() {
               </span>
               <span className="text-[1.3rem]">Add new dish</span>
             </div>
-            {foodList?.map((item) => (
-              <div key={item.id} className="food-card--lg">
-                <div className="card-content">
-                  <LazyLoadImage
-                    src={item.image}
-                    effect="blur"
-                    className="food-card__image"
-                    wrapperProps={{
-                      // If you need to, you can tweak the effect transition using the wrapper style.
-                      style: { transitionDelay: "0.5s" },
-                    }}
-                  />
-                  <div className="food-card__title !text-white">
-                    {item.name}
-                  </div>
-                  <div className="food-card__num-infos">
-                    <div className="col ">$ {item.price}</div>
-                    <div className="col text-[0.5rem] !text-white">
-                      <i className="fa-solid fa-circle"></i>
+            {foodList?.map((item) => {
+              // console.log("Item title", item.image);
+              return (
+                <div key={item.id} className="food-card--lg">
+                  <div className="card-content">
+                    <LazyLoadImage
+                      src={item.image}
+                      effect="blur"
+                      className="food-card__image"
+                      wrapperProps={{
+                        // If you need to, you can tweak the effect transition using the wrapper style.
+                        style: { transitionDelay: "0.5s" },
+                      }}
+                    />
+                    <div className="food-card__title !text-white">
+                      {item.name}
                     </div>
-                    <div className="col">20 Bowls</div>
+                    <div className="food-card__num-infos">
+                      <div className="col ">$ {item.price}</div>
+                      <div className="col text-[0.5rem] !text-white">
+                        <i className="fa-solid fa-circle"></i>
+                      </div>
+                      <div className="col">20 Bowls</div>
+                    </div>
                   </div>
-                </div>
-                <div
-                  className="card-edit"
-                  onClick={() => {
-                    setUpdateFoodItem(item);
-                    setFoodName(item.name);
-                    setFoodPrice(item.price);
-                    setFoodImage(item.image);
-                    setIsOpenModal(true);
-                  }}
-                >
                   <div
-                    className="card-edit__text"
-                    style={{ cursor: "pointer" }}
+                    className="card-edit"
+                    onClick={() => {
+                      setUpdateFoodItem(item);
+                      setFoodName(item.name);
+                      setFoodPrice(item.price);
+                      setFoodImage(item.image);
+                      setIsOpenModal(true);
+                    }}
                   >
-                    <span>
-                      <i className="fa-regular fa-pen-to-square"></i>
-                    </span>
-                    <span>Edit Dish</span>
+                    <div
+                      className="card-edit__text"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span>
+                        <i className="fa-regular fa-pen-to-square"></i>
+                      </span>
+                      <span>Edit Dish</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ) : ind === 6 ? (
@@ -223,10 +225,11 @@ function Settings() {
   const [foodPrice, setFoodPrice] = useState(0);
 
   const [foodImage, setFoodImage] = useState("");
-  const [validImage, setValidImage] = useState(false);
-  const [imageError, setImageError] = useState("");
+  // const [validImage, setValidImage] = useState(false);
+  // const [imageError, setImageError] = useState("");
 
   const { reset, register, handleSubmit, setValue } = useForm();
+  // const registerWithMask = useHookFormMask(register);
 
   // Handling Bar states
   const handleLinkClick = (ind) => {
@@ -241,21 +244,31 @@ function Settings() {
   };
 
   // Checking whether image url is valid or not
-  const validateImageUrl = (url) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(true);
-      img.onerror = () => reject(new Error("Invalid image URL"));
-      img.src = url;
+  // const validateImageUrl = (url) => {
+  //   return new Promise((resolve, reject) => {
+  //     const img = new Image();
+  //     img.onload = () => resolve(true);
+  //     img.onerror = () => reject(new Error("Invalid image URL"));
+  //     img.src = url;
+  //   });
+  // };
+
+  const handleImageUpload = (imgFile) => {
+    let image64 = "";
+    getBase64(imgFile, (result) => {
+      image64 = result;
+      setFoodImage(image64);
     });
   };
 
   // Submitting form
   const handleFormSubmit = async (data) => {
-    if (foodName.trim() && foodPrice.trim() && validImage) {
+    if (foodName.trim() && foodPrice.trim()) {
+      // console.log(data);
+      // console.log(foodName, foodPrice, foodImage);
       updateFoodItem
-        ? updateFood({ ...updateFoodItem, ...data })
-        : addFoodItem(data);
+        ? updateFood({ ...updateFoodItem, ...data, image: foodImage })
+        : addFoodItem({ ...data, image: foodImage });
       setIsOpenModal(false);
       alert(
         "Food product was successfully " +
@@ -273,7 +286,7 @@ function Settings() {
 
   const BASE_URL = "https://www.themealdb.com/api/json/v1/1/search.php?f=";
   const getFoodList = async () => {
-    console.log("Get Food List Fetch");
+    // console.log("Get Food List Fetch");
     const options = {
       method: "get",
       url: BASE_URL + selectText,
@@ -305,23 +318,23 @@ function Settings() {
     }
   };
 
-  useEffect(() => {
-    const handleValidate = async () => {
-      try {
-        // console.log(foodList);
-        await validateImageUrl(foodImage);
-        setValidImage(true);
-        setImageError("");
-      } catch (error) {
-        setValidImage(false);
-        setImageError(error.message);
-      }
-    };
-    handleValidate();
-  }, [foodImage]);
+  // useEffect(() => {
+  //   const handleValidate = async () => {
+  //     try {
+  //       console.log(foodList);
+  //       await validateImageUrl(foodImage);
+  //       setValidImage(true);
+  //       setImageError("");
+  //     } catch (error) {
+  //       setValidImage(false);
+  //       setImageError(error.message);
+  //     }
+  //   };
+  //   if (foodImage) handleValidate();
+  // }, [foodImage]);
 
   useEffect(() => {
-    setErrorMessage("");
+    // setErrorMessage("");
     getFoodList();
   }, [selectText]);
 
@@ -441,12 +454,68 @@ function Settings() {
                 {...register("price", {
                   required: "Food price must be number",
                   onChange: (e) => {
-                    setValue("price", e.target.value);
+                    let valueClear = e.target.value;
+                    // Getting last character ascii order
+                    let ord = valueClear?.at(-1)?.charCodeAt(0);
+                    // Excluding all characters exlude dots and digits
+                    if (
+                      valueClear &&
+                      valueClear.at(-1) !== "." &&
+                      (ord < "0".charCodeAt(0) || ord > "9".charCodeAt(0))
+                    ) {
+                      valueClear = valueClear.substring(
+                        0,
+                        valueClear.length - 1
+                      );
+                    }
+                    // Remove leading zeros
+                    valueClear = valueClear.replace(/^0+/, "0");
+                    // If 0234 -> 234
+                    if (
+                      valueClear.startsWith("0") &&
+                      valueClear.length > 1 &&
+                      !valueClear.startsWith("0.")
+                    ) {
+                      valueClear = valueClear.replace(/^0+/, "");
+                    }
+
+                    // Handle cases like ".123" to become "0.123"
+                    if (valueClear.startsWith(".")) {
+                      valueClear = "0" + valueClear;
+                    }
+
+                    // Remove extra dots
+                    if ((valueClear.match(/\./g) || []).length > 1) {
+                      valueClear = valueClear.replace(
+                        /\./g,
+                        (match, offset, string) =>
+                          offset === string.indexOf(".") ? "." : ""
+                      );
+                    }
+                    if (valueClear.length - valueClear.indexOf(".") >= 3)
+                      valueClear = +Number(valueClear).toFixed(3);
+                    if (valueClear >= 1e9) {
+                      valueClear = Math.floor(valueClear / 10);
+                    }
+                    setValue("price", valueClear);
                     setFoodPrice(e.target.value);
                   },
                 })}
               />
+              <label
+                htmlFor="image"
+                className="block mt-4 rounded-md px-4 py-2 outline-none border-[1px] border-[#393C49] cursor-pointer"
+              >
+                Select food image
+              </label>
               <input
+                type="file"
+                id="image"
+                name="image"
+                className="hidden"
+                onChange={(e) => handleImageUpload(e.target.files[0])}
+              />
+              {/* <input
                 type="text"
                 value={foodImage}
                 placeholder="Food Image"
@@ -458,8 +527,9 @@ function Settings() {
                     setFoodImage(e.target.value);
                   },
                 })}
-              />
-              {validImage ? (
+              /> */}
+
+              {/* {validImage ? (
                 <img
                   src={foodImage}
                   ref={ref}
@@ -467,6 +537,13 @@ function Settings() {
                 />
               ) : (
                 <p className="text-[red] mt-4 font-[600]">{imageError}</p>
+              )} */}
+              {foodImage && (
+                <img
+                  src={foodImage}
+                  ref={ref}
+                  className="mt-8 h-[25vh] object-cover object-center"
+                />
               )}
               <button
                 type="submit"

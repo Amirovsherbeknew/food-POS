@@ -1,5 +1,3 @@
-import useProductStore from "../store/store";
-
 function convertNumber(alphaNum) {
   alphaNum = alphaNum.split("");
   let i = 0;
@@ -11,4 +9,15 @@ function convertNumber(alphaNum) {
   return Number.parseFloat(alphaNum.slice(i).join(""));
 }
 
-export { convertNumber };
+function getBase64(file, cb) {
+  let reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function () {
+    cb(reader.result);
+  };
+  reader.onerror = function (error) {
+    console.log("Error: ", error);
+  };
+}
+
+export { convertNumber, getBase64 };
