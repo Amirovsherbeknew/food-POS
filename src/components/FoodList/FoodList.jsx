@@ -91,9 +91,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   const onSubmit2 = (data) => console.log(data);
 
   // Drawer handlers
-  // const showDrawer = () => {
-  //   setOpen(true);
-  // };
   const onClose = () => {
     if (showPayment) {
       setShowPayment(false);
@@ -146,9 +143,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // quantity handler
   const ProductQuantity = useProductStore((state) => state.productQuantity);
 
-  // // Calculating total price
-  // const totalPrice = useProductStore((state) => state.calculateTotalPrice);
-
   // food notes handler
   const handleFoodNote = useProductStore((state) => state.handleFoodNote);
 
@@ -163,16 +157,12 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     (text) => {
       return filterFoods(text);
     },
-    [filterFoods]
+    [selectText, filterFoods]
   );
 
   useEffect(() => {
     setFoodListFiltered(memoizedFilterFoods(selectText));
   }, [selectText, memoizedFilterFoods]);
-
-  // useEffect(() => {
-  //   setFoodListFiltered(filterFoods(selectText));
-  // }, [selectText, filterFoods]);
 
   return (
     <>
@@ -210,7 +200,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             )}
           </>
         }
-        // closeIcon={false}
         closeIcon={
           showPayment ? (
             <i className="fa-solid fa-arrow-left-long text-white"></i>
@@ -218,8 +207,10 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             <i className="fa-solid fa-xmark text-white"></i>
           )
         }
-        headerStyle={{
-          borderBottom: `${showPayment ? "1px solid #393C49" : "none"}`,
+        styles={{
+          header: {
+            borderBottom: `${showPayment ? "1px solid #393C49" : "none"}`,
+          },
         }}
       >
         <form onSubmit={handleSubmit2(onSubmit2)}>
@@ -247,7 +238,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               ))}
             </Flex>
 
-            {/* Din In contents */}
+            {/* Dine In contents */}
             {(!btnInd || btnInd === 2) && (
               <div className="drawer__content absolute top-16 w-full">
                 <div className="flex-outer pr-4 flex gap-4 text-[1rem]">
@@ -444,8 +435,8 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
 }
 
 FoodList.propTypes = {
-  seenFoodNav: PropTypes.boolean,
-  seenFoodFilter: PropTypes.boolean,
+  seenFoodNav: PropTypes.bool,
+  seenFoodFilter: PropTypes.bool,
 };
 
 export default FoodList;

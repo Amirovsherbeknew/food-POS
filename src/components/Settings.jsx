@@ -62,9 +62,6 @@ function Settings() {
   // Update item object
   const [updateFoodItem, setUpdateFoodItem] = useState(null);
 
-  // Nav active tab key
-  // const [key, setKey] = useState(null);
-
   // Text in search
   const selectText = useProductStore((state) => state.selectText);
   const [datas, setDatas] = useState([]);
@@ -157,16 +154,6 @@ function Settings() {
                   <>
                     <div className="datameal-card text-center" key={ind}>
                       <div className="flex items-center justify-center">
-                        {/* <LazyLoadImage
-                          src={mealObj?.strMealThumb}
-                          alt={mealObj?.strMeal + " food"}
-                          className="max-w-[100%] max-h-[100%]"
-                          effect="blur"
-                          wrapperProps={{
-                            // If you need to, you can tweak the effect transition using the wrapper style.
-                            style: { transitionDelay: "1s" },
-                          }}
-                        /> */}
                         <LazyLoadImage
                           src={mealObj?.strMealThumb}
                           alt={mealObj?.strMeal + " food"}
@@ -253,7 +240,7 @@ function Settings() {
     );
   };
 
-  // Checking wheter image url is valid or not
+  // Checking whether image url is valid or not
   const validateImageUrl = (url) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -388,74 +375,9 @@ function Settings() {
               <Tabs
                 defaultActiveKey="1"
                 items={items}
-                // onChange={(key) => {
-                //   console.log(key);
-                //   setKey(key);
-                // }}
                 tabBarStyle={{ color: "white !important", fontWeight: "500" }}
               ></Tabs>
               <hr />
-
-              {/* settings content navbar previous version  */}
-              {/* <div className={clsx("mt-[1.2rem] flex gap-8 flex-wrap")}>
-                {navLinks?.map((item, index) => (
-                  <div
-                    key={index}
-                    to={item.to || "#"}
-                    className={clsx(
-                      "relative font-[600] text-[0.875rem] text-[white] duration-400 cursor-pointer",
-                      "after:block after:content-[' '] after:absolute after:bottom-[-1rem] after:w-[0] after:h-[3px] after:bg-[#ea7c69]",
-                      "hover:text-[#ea7c69] hover:after:w-[70%]",
-                      item.selected && "!text-[#ea7c69] after:w-[70%]"
-                    )}
-                  >
-                    {item.value}
-                  </div>
-                ))}
-              </div>
-              <hr /> */}
-
-              {/* Food cards */}
-
-              {/* {navLinks[0].selected && (
-                <div className="food-cards-wrapper h-[63vh] overflow-y-auto mt-4">
-                  <div className="food-cards grid grid-cols-3 gap-x-4 gap-y-6 px-4 py-4">
-                    <div
-                      key={uuidv4()}
-                      className="food-card-add h-[23.5rem] border-[#ea7c69] border-[1px] border-dashed rounded-[10px] flex flex-col justify-center items-center gap-4 text-[#EA7C69] font-[600] cursor-pointer duration-500 hover:translate-y-[-0.6rem]"
-                      onClick={() => setIsOpenModal(true)}
-                    >
-                      <span className="block text-md">
-                        <i className="fa-solid fa-plus"></i>
-                      </span>
-                      <span className="text-[1.3rem]">Add new dish</span>
-                    </div>
-                    {foodList?.map((item) => (
-                      <div key={item.id} className="food-card--lg">
-                        <div className="card-content">
-                          <img src={item.image} className="food-card__image" />
-                          <div className="food-card__title">{item.name}</div>
-                          <div className="food-card__num-infos">
-                            <div className="col ">$ {item.price}</div>
-                            <div className="col text-[0.5rem] !text-white">
-                              <i className="fa-solid fa-circle"></i>
-                            </div>
-                            <div className="col">20 Bowls</div>
-                          </div>
-                        </div>
-                        <div className="card-edit">
-                          <div className="card-edit__text">
-                            <span>
-                              <i className="fa-regular fa-pen-to-square"></i>
-                            </span>
-                            <span>Edit Dish</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )} */}
             </>
           )}
         </div>
