@@ -7,7 +7,6 @@ import ramen from "@/assets/images/ramen.png";
 import rollton from "@/assets/images/rollton.png";
 import rolltonEgg from "@/assets/images/rollton_egg.png";
 import xinkali from "@/assets/images/xinkali.png";
-
 const useProductStore = create((set) => ({
   total: 0,
   selectText: "",

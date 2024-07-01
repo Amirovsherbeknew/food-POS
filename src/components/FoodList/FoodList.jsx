@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHookFormMask } from "use-mask-input";
 import clsx from "clsx";
@@ -16,6 +16,7 @@ import FoodCardImage from "../FoodCardImage";
 
 function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Buttons state
+  const {selectText} = useProductStore()
   const [btns, setBtns] = useState([
     {
       name: "Dine In",
@@ -44,26 +45,19 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   const foodList = useProductStore((state) => state.foodList);
 
   // Foods filtering state updater
-  const [foodListFiltered, setFoodListFiltered] = useState(foodList);
+
 
   // Foods filter text in search input
-  const selectText = useProductStore((state) => state.selectText);
-
+  // const selectText = useProductStore((state) => state.selectText);
   // Foods filtering due to filter text in search input
-  const filterFoods = (text) => {
-    const foods = foodList;
+  const filterFoods = () => {
+    let foods = foodList;
     // console.log("Foods get", foods);
-    const textLowered = text.toLowerCase();
-    const foodsFiltered = foods.filter((foodItem) => {
-      for (const word of foodItem.name.split(" ")) {
-        const wordLowered = word.toLowerCase();
-        if (wordLowered.startsWith(textLowered)) {
-          return true;
-        }
-      }
-      return false;
-    });
-    return foodsFiltered;
+    if (selectText) {
+      const textLowered = selectText.toLowerCase();
+      foods = foods.filter(foodItem => foodItem.name.toLowerCase().includes(textLowered)); 
+    }
+    return foods;
   };
 
   // Total price
@@ -131,7 +125,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   function FilterFoodList() {
     return foodList.filter((item) => selectProductList.includes(item.id));
   }
-
   // selectProductList handlers
   const ViewSelectProduct = useProductStore((state) => state.viewSelectProduct);
 
@@ -153,16 +146,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     }
   }, [total]);
 
-  const memoizedFilterFoods = useCallback(
-    (text) => {
-      return filterFoods(text);
-    },
-    [selectText, filterFoods]
-  );
-
-  useEffect(() => {
-    setFoodListFiltered(memoizedFilterFoods(selectText));
-  }, [selectText, memoizedFilterFoods]);
+  
 
   return (
     <>
@@ -413,7 +397,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       )}
       {/* Foods Cards on content side */}
       <div className="w-full flex flex-wrap gap-[2rem_3rem]">
-        {foodListFiltered?.map((item, ind) => (
+        {filterFoods()?.map((item, ind) => (
           <div
             key={ind}
             className="food-card--sm cursor-pointer !text-white"
@@ -424,7 +408,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
           >
             <FoodCardImage item={item} />
             <div className="food-name">{item.name}</div>
-            <div className="food-price">{item.price}</div>
+            <div className="food-price">$ {item.price}</div>
             <div className="food-available">{item.available}</div>
             <div className="food-card--sm-back"></div>
           </div>
