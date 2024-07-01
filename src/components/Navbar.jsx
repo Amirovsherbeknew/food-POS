@@ -31,7 +31,7 @@ const linkLists = [
   },
 ];
 
-function Nav({ links = linkLists }) {
+function Navbar({ links = linkLists }) {
   const items = links.map((item, ind) => ({
     key: String(ind),
     label: (
@@ -61,7 +61,7 @@ function Nav({ links = linkLists }) {
   );
 }
 
-Nav.propTypes = {
+Navbar.propTypes = {
   links: PropTypes.array,
 };
-export default Nav;
+export default Navbar;

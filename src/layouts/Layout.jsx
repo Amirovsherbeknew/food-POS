@@ -6,8 +6,8 @@ function Layout() {
   return (
     <div className="layout relative flex items-start">
       <Sidebar />
-      <div className="w-full min-h-[100vh] h-fit bg-[#252836] p-[1.2rem_2rem_1.2rem_7rem]">
-        <Header/>
+      <div className="relative w-full min-h-[100vh] h-fit bg-[#252836] p-[1.2rem_2rem_1.2rem_7rem]">
+        <Header />
         <Outlet />
       </div>
     </div>

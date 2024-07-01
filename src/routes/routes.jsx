@@ -1,8 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "../layouts/Layout";
 import Home from "@/pages/home";
-import Dashboard from "@/pages/dashboard";
-import Settings from "../pages/settings";
+import Settings from "@/pages/settings";
+import DashboardPage from "@/pages/dashboard";
 
 function Routes() {
   return (
@@ -14,7 +14,7 @@ function Routes() {
           children: [
             { path: "/home", element: <Home /> },
             { path: "/", element: <Home /> },
-            { path: "dashboard", element: <Dashboard /> },
+            { path: "dashboard", element: <DashboardPage /> },
             { path: "settings", element: <Settings /> },
           ],
         },

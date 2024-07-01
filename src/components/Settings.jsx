@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import useProductStore from "@/store/store";
-import { getBase64 } from "../utils";
+import { getBase64 } from "@/utils";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Tabs } from "antd";
 import {
