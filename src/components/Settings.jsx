@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useHookFormMask } from "use-mask-input";
-
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
@@ -11,8 +8,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
 import useProductStore from "../store/store";
-import Nav from "@/components/Nav";
-
 import { Tabs } from "antd";
 import {
   ShopOutlined,
@@ -57,7 +52,6 @@ const navLinks = [
 
 function Settings() {
   const ref = useRef();
-
   // Foods state
   const foodList = useProductStore((state) => state.foodList);
   // Food add function
@@ -128,9 +122,9 @@ function Settings() {
                   className="card-edit"
                   onClick={() => {
                     setUpdateFoodItem((prevItem) => item);
-                    setFoodName((name) => item.name);
-                    setFoodPrice((price) => item.price);
-                    setFoodImage((image) => item.image);
+                    setFoodName(item.name);
+                    setFoodPrice(item.price);
+                    setFoodImage(item.image);
                     setIsOpenModal(true);
                   }}
                 >
