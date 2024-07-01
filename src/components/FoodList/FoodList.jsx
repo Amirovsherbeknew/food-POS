@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { withMask, useHookFormMask } from "use-mask-input";
+import { useHookFormMask } from "use-mask-input";
 import clsx from "clsx";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import PropTypes from "prop-types";
+
 import { Select, Drawer, Flex } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
@@ -9,9 +12,11 @@ import useProductStore from "@/store/store";
 
 import Nav from "@/components/Nav";
 import PaymentForm from "../paymentForm";
+import FoodCardImage from "../FoodCardImage";
 
 function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Buttons state
+  const {selectText} = useProductStore()
   const [btns, setBtns] = useState([
     {
       name: "Dine In",
@@ -30,9 +35,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Active button state
   const [btnInd, setbtnInd] = useState(0);
 
-  // Delivery price
-  const [showDelivery, setShowDelivery] = useState(false);
-
   // Payment state
   const [showPayment, setShowPayment] = useState(false);
 
@@ -41,6 +43,22 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
 
   // Foods state
   const foodList = useProductStore((state) => state.foodList);
+
+  // Foods filtering state updater
+
+
+  // Foods filter text in search input
+  // const selectText = useProductStore((state) => state.selectText);
+  // Foods filtering due to filter text in search input
+  const filterFoods = () => {
+    let foods = foodList;
+    // console.log("Foods get", foods);
+    if (selectText) {
+      const textLowered = selectText.toLowerCase();
+      foods = foods.filter(foodItem => foodItem.name.toLowerCase().includes(textLowered)); 
+    }
+    return foods;
+  };
 
   // Total price
   const total = useProductStore((state) => state.total);
@@ -67,9 +85,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   const onSubmit2 = (data) => console.log(data);
 
   // Drawer handlers
-  const showDrawer = () => {
-    setOpen(true);
-  };
   const onClose = () => {
     if (showPayment) {
       setShowPayment(false);
@@ -110,7 +125,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   function FilterFoodList() {
     return foodList.filter((item) => selectProductList.includes(item.id));
   }
-
   // selectProductList handlers
   const ViewSelectProduct = useProductStore((state) => state.viewSelectProduct);
 
@@ -122,9 +136,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // quantity handler
   const ProductQuantity = useProductStore((state) => state.productQuantity);
 
-  // Calculating total price
-  const totalPrice = useProductStore((state) => state.calculateTotalPrice);
-
   // food notes handler
   const handleFoodNote = useProductStore((state) => state.handleFoodNote);
 
@@ -134,6 +145,8 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       onChildrenClose();
     }
   }, [total]);
+
+  
 
   return (
     <>
@@ -171,7 +184,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             )}
           </>
         }
-        // closeIcon={false}
         closeIcon={
           showPayment ? (
             <i className="fa-solid fa-arrow-left-long text-white"></i>
@@ -179,8 +191,10 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             <i className="fa-solid fa-xmark text-white"></i>
           )
         }
-        headerStyle={{
-          borderBottom: `${showPayment ? "1px solid #393C49" : "none"}`,
+        styles={{
+          header: {
+            borderBottom: `${showPayment ? "1px solid #393C49" : "none"}`,
+          },
         }}
       >
         <form onSubmit={handleSubmit2(onSubmit2)}>
@@ -208,7 +222,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               ))}
             </Flex>
 
-            {/* Din In contents */}
+            {/* Dine In contents */}
             {(!btnInd || btnInd === 2) && (
               <div className="drawer__content absolute top-16 w-full">
                 <div className="flex-outer pr-4 flex gap-4 text-[1rem]">
@@ -289,7 +303,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                         />
                       </div>
                       <div
-                        onClick={(e) => deleteSelectedProduct(item.id)}
+                        onClick={() => deleteSelectedProduct(item.id)}
                         className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:border-red-700 hover:text-red-700"
                       >
                         <DeleteOutlined />
@@ -383,7 +397,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       )}
       {/* Foods Cards on content side */}
       <div className="w-full flex flex-wrap gap-[2rem_3rem]">
-        {foodList.map((item, ind) => (
+        {filterFoods()?.map((item, ind) => (
           <div
             key={ind}
             className="food-card--sm cursor-pointer !text-white"
@@ -392,9 +406,9 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
               setOpen(true);
             }}
           >
-            <img src={item.image} />
+            <FoodCardImage item={item} />
             <div className="food-name">{item.name}</div>
-            <div className="food-price">{item.price}</div>
+            <div className="food-price">$ {item.price}</div>
             <div className="food-available">{item.available}</div>
             <div className="food-card--sm-back"></div>
           </div>
@@ -403,5 +417,10 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     </>
   );
 }
+
+FoodList.propTypes = {
+  seenFoodNav: PropTypes.bool,
+  seenFoodFilter: PropTypes.bool,
+};
 
 export default FoodList;

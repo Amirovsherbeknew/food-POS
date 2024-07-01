@@ -1,6 +1,6 @@
-import { Tabs } from "antd";
-import clsx from "clsx";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { Tabs } from "antd";
 
 import "@/assets/styles/global.scss";
 
@@ -31,7 +31,7 @@ const linkLists = [
   },
 ];
 
-function Nav({ links = linkLists, className }) {
+function Nav({ links = linkLists }) {
   const items = links.map((item, ind) => ({
     key: String(ind),
     label: (
@@ -56,28 +56,12 @@ function Nav({ links = linkLists, className }) {
           tabBarStyle={{ color: "white !important", fontWeight: "500" }}
         />
       </div>
-
-      {/* Home page Nav previous version */}
-      {/* <div
-        className={clsx("mt-[1.2rem] flex gap-8 flex-wrap", className || "")}
-      >
-        {links.map((item, index) => (
-          <Link
-            key={index}
-            to={item.to || "#"}
-            className={clsx(
-              "relative font-[600] text-[0.875rem] text-[white] duration-400",
-              "after:block after:content-[' '] after:absolute after:bottom-[-1rem] after:w-[0] after:h-[3px] after:bg-[#ea7c69]",
-              "hover:text-[#ea7c69] hover:after:w-[70%]"
-            )}
-          >
-            {item.value}
-          </Link>
-        ))}
-      </div> */}
       <hr />
     </>
   );
 }
 
+Nav.propTypes = {
+  links: PropTypes.array,
+};
 export default Nav;

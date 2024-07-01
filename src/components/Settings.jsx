@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useHookFormMask } from "use-mask-input";
-
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import clsx from "clsx";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 import useProductStore from "../store/store";
-import Nav from "@/components/Nav";
-
 import { Tabs } from "antd";
 import {
   ShopOutlined,
@@ -18,7 +16,7 @@ import {
 } from "@ant-design/icons";
 
 import filterIcon from "../assets/icons/filter.png";
-import Spinner from "../animations";
+import Spinner from "../animations/Spinner";
 
 // Settings content Nav Links
 const navLinks = [
@@ -54,7 +52,6 @@ const navLinks = [
 
 function Settings() {
   const ref = useRef();
-
   // Foods state
   const foodList = useProductStore((state) => state.foodList);
   // Food add function
@@ -64,9 +61,6 @@ function Settings() {
 
   // Update item object
   const [updateFoodItem, setUpdateFoodItem] = useState(null);
-
-  // Nav active tab key
-  const [key, setKey] = useState(null);
 
   // Text in search
   const selectText = useProductStore((state) => state.selectText);
@@ -101,7 +95,15 @@ function Settings() {
             {foodList?.map((item) => (
               <div key={item.id} className="food-card--lg">
                 <div className="card-content">
-                  <img src={item.image} className="food-card__image" />
+                  <LazyLoadImage
+                    src={item.image}
+                    effect="blur"
+                    className="food-card__image"
+                    wrapperProps={{
+                      // If you need to, you can tweak the effect transition using the wrapper style.
+                      style: { transitionDelay: "0.5s" },
+                    }}
+                  />
                   <div className="food-card__title !text-white">
                     {item.name}
                   </div>
@@ -116,10 +118,10 @@ function Settings() {
                 <div
                   className="card-edit"
                   onClick={() => {
-                    setUpdateFoodItem((prevItem) => item);
-                    setFoodName((name) => item.name);
-                    setFoodPrice((price) => item.price);
-                    setFoodImage((image) => item.image);
+                    setUpdateFoodItem(item);
+                    setFoodName(item.name);
+                    setFoodPrice(item.price);
+                    setFoodImage(item.image);
                     setIsOpenModal(true);
                   }}
                 >
@@ -143,19 +145,20 @@ function Settings() {
             {isLoading ? (
               <Spinner />
             ) : errorMessage ? (
-              <h1 className="text-red-600 text-[4rem] font-bold">
+              <h1 className="text-[#ea7c69] text-[4rem] font-bold">
                 {errorMessage}
               </h1>
             ) : (
               <div className="max-h-[60vh] overflow-auto p-4 grid grid-cols-3 gap-x-4 gap-y-6">
-                {datas?.meals?.map((mealObj) => (
+                {datas?.meals?.map((mealObj, ind) => (
                   <>
-                    <div className="datameal-card text-center">
+                    <div className="datameal-card text-center" key={ind}>
                       <div className="flex items-center justify-center">
-                        <img
+                        <LazyLoadImage
                           src={mealObj?.strMealThumb}
-                          className="max-w-[100%] max-h-[100%]"
                           alt={mealObj?.strMeal + " food"}
+                          className="max-w-[100%] max-h-[100%]"
+                          effect="blur"
                         />
                       </div>
                       <div className="text-[#ea7c69] mt-4 text-center font-semibold text-xl">
@@ -223,13 +226,7 @@ function Settings() {
   const [validImage, setValidImage] = useState(false);
   const [imageError, setImageError] = useState("");
 
-  const {
-    reset,
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const { reset, register, handleSubmit, setValue } = useForm();
 
   // Handling Bar states
   const handleLinkClick = (ind) => {
@@ -243,7 +240,7 @@ function Settings() {
     );
   };
 
-  // Checking wheter image url is valid or not
+  // Checking whether image url is valid or not
   const validateImageUrl = (url) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -285,8 +282,8 @@ function Settings() {
     setIsLoading(true);
     try {
       const res = await axios.request(options);
-      console.log("Url", options.url);
-      console.log("Response", res);
+      // console.log("Url", options.url);
+      // console.log("Response", res);
       if (res.data) {
         setDatas(res.data);
       } else {
@@ -302,6 +299,7 @@ function Settings() {
       } else {
         const timeout = setTimeout(() => {
           setIsLoading(false);
+          clearTimeout(timeout);
         }, (1 - diff) * 1000);
       }
     }
@@ -377,74 +375,9 @@ function Settings() {
               <Tabs
                 defaultActiveKey="1"
                 items={items}
-                onChange={(key) => {
-                  console.log(key);
-                  setKey(key);
-                }}
                 tabBarStyle={{ color: "white !important", fontWeight: "500" }}
               ></Tabs>
               <hr />
-
-              {/* settings content navbar previous version  */}
-              {/* <div className={clsx("mt-[1.2rem] flex gap-8 flex-wrap")}>
-                {navLinks?.map((item, index) => (
-                  <div
-                    key={index}
-                    to={item.to || "#"}
-                    className={clsx(
-                      "relative font-[600] text-[0.875rem] text-[white] duration-400 cursor-pointer",
-                      "after:block after:content-[' '] after:absolute after:bottom-[-1rem] after:w-[0] after:h-[3px] after:bg-[#ea7c69]",
-                      "hover:text-[#ea7c69] hover:after:w-[70%]",
-                      item.selected && "!text-[#ea7c69] after:w-[70%]"
-                    )}
-                  >
-                    {item.value}
-                  </div>
-                ))}
-              </div>
-              <hr /> */}
-
-              {/* Food cards */}
-
-              {/* {navLinks[0].selected && (
-                <div className="food-cards-wrapper h-[63vh] overflow-y-auto mt-4">
-                  <div className="food-cards grid grid-cols-3 gap-x-4 gap-y-6 px-4 py-4">
-                    <div
-                      key={uuidv4()}
-                      className="food-card-add h-[23.5rem] border-[#ea7c69] border-[1px] border-dashed rounded-[10px] flex flex-col justify-center items-center gap-4 text-[#EA7C69] font-[600] cursor-pointer duration-500 hover:translate-y-[-0.6rem]"
-                      onClick={() => setIsOpenModal(true)}
-                    >
-                      <span className="block text-md">
-                        <i className="fa-solid fa-plus"></i>
-                      </span>
-                      <span className="text-[1.3rem]">Add new dish</span>
-                    </div>
-                    {foodList?.map((item) => (
-                      <div key={item.id} className="food-card--lg">
-                        <div className="card-content">
-                          <img src={item.image} className="food-card__image" />
-                          <div className="food-card__title">{item.name}</div>
-                          <div className="food-card__num-infos">
-                            <div className="col ">$ {item.price}</div>
-                            <div className="col text-[0.5rem] !text-white">
-                              <i className="fa-solid fa-circle"></i>
-                            </div>
-                            <div className="col">20 Bowls</div>
-                          </div>
-                        </div>
-                        <div className="card-edit">
-                          <div className="card-edit__text">
-                            <span>
-                              <i className="fa-regular fa-pen-to-square"></i>
-                            </span>
-                            <span>Edit Dish</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )} */}
             </>
           )}
         </div>
@@ -468,7 +401,7 @@ function Settings() {
           >
             <div
               className="absolute top-[1.5rem] right-[2rem] text-[1.5rem] cursor-pointer"
-              onClick={(e) => {
+              onClick={() => {
                 console.log("X closed");
                 setFoodName("");
                 setFoodPrice(0);
@@ -533,7 +466,7 @@ function Settings() {
                   className="mt-8 h-[25vh] object-cover object-center"
                 />
               ) : (
-                <p className="text-[red] mt-4 font-[600]">{errorMessage}</p>
+                <p className="text-[red] mt-4 font-[600]">{imageError}</p>
               )}
               <button
                 type="submit"

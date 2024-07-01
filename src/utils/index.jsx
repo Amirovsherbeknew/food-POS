@@ -1,3 +1,5 @@
+import useProductStore from "../store/store";
+
 function convertNumber(alphaNum) {
   alphaNum = alphaNum.split("");
   let i = 0;

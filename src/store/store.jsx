@@ -7,9 +7,14 @@ import ramen from "@/assets/images/ramen.png";
 import rollton from "@/assets/images/rollton.png";
 import rolltonEgg from "@/assets/images/rollton_egg.png";
 import xinkali from "@/assets/images/xinkali.png";
-
 const useProductStore = create((set) => ({
   total: 0,
+  selectText: "",
+  handleSelectText: (text) => {
+    set({
+      selectText: text,
+    });
+  },
   selectedFood: [],
   foodList: [
     {
@@ -128,14 +133,9 @@ const useProductStore = create((set) => ({
       available: "20 Bowls available",
       quantity: 0,
       note: "",
+      isLoaded: false,
     },
   ],
-  selectText: "",
-  handleSelectText: (text) => {
-    set((state) => ({
-      selectText: text,
-    }));
-  },
   addFoodItem: (obj) => {
     const newFoodItem = {
       ...obj,
@@ -200,12 +200,12 @@ const useProductStore = create((set) => ({
     });
   },
   calculateTotalPrice: (foodList) => {
-    set((state) => ({
+    set({
       total: foodList.reduce((acc, item) => {
         acc += Number.parseFloat(item.price) * item.quantity;
         return acc;
       }, 0),
-    }));
+    });
   },
   handleFoodNote: (text, ind) => {
     set((state) => ({
