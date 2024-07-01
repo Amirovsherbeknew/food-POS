@@ -16,7 +16,7 @@ import FoodCardImage from "../FoodCardImage";
 
 function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Buttons state
-  const {selectText} = useProductStore()
+  const { selectText } = useProductStore();
   const [btns, setBtns] = useState([
     {
       name: "Dine In",
@@ -44,18 +44,15 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Foods state
   const foodList = useProductStore((state) => state.foodList);
 
-  // Foods filtering state updater
-
-
-  // Foods filter text in search input
-  // const selectText = useProductStore((state) => state.selectText);
   // Foods filtering due to filter text in search input
   const filterFoods = () => {
     let foods = foodList;
     // console.log("Foods get", foods);
     if (selectText) {
       const textLowered = selectText.toLowerCase();
-      foods = foods.filter(foodItem => foodItem.name.toLowerCase().includes(textLowered)); 
+      foods = foods.filter((foodItem) =>
+        foodItem.name.toLowerCase().includes(textLowered)
+      );
     }
     return foods;
   };
@@ -145,8 +142,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
       onChildrenClose();
     }
   }, [total]);
-
-  
 
   return (
     <>
