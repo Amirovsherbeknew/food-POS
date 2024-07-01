@@ -8,13 +8,13 @@ import rollton from "@/assets/images/rollton.png";
 import rolltonEgg from "@/assets/images/rollton_egg.png";
 import xinkali from "@/assets/images/xinkali.png";
 
-const useProductStore = create((set, get) => ({
+const useProductStore = create((set) => ({
   total: 0,
   selectText: "",
   handleSelectText: (text) => {
-    set((state) => ({
+    set({
       selectText: text,
-    }));
+    });
   },
   selectedFood: [],
   foodList: [
@@ -201,12 +201,12 @@ const useProductStore = create((set, get) => ({
     });
   },
   calculateTotalPrice: (foodList) => {
-    set((state) => ({
+    set({
       total: foodList.reduce((acc, item) => {
         acc += Number.parseFloat(item.price) * item.quantity;
         return acc;
       }, 0),
-    }));
+    });
   },
   handleFoodNote: (text, ind) => {
     set((state) => ({

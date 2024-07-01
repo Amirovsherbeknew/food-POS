@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useAsyncError } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
 import { Image } from "antd";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -38,5 +38,9 @@ function FoodCardImage({ item }) {
     </>
   );
 }
+
+FoodCardImage.propTypes = {
+  item: PropTypes.object,
+};
 
 export default FoodCardImage;

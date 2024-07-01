@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-
+import { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { withMask, useHookFormMask } from "use-mask-input";
-
+import { useHookFormMask } from "use-mask-input";
 import clsx from "clsx";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import PropTypes from "prop-types";
 
-import { Select, Drawer, Flex, Image } from "antd";
+import { Select, Drawer, Flex } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 import useProductStore from "@/store/store";
@@ -36,9 +34,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // Active button state
   const [btnInd, setbtnInd] = useState(0);
 
-  // Delivery price
-  const [showDelivery, setShowDelivery] = useState(false);
-
   // Payment state
   const [showPayment, setShowPayment] = useState(false);
 
@@ -47,17 +42,13 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
 
   // Foods state
   const foodList = useProductStore((state) => state.foodList);
-  // Foods image isLoad state updater
-  const handleFoodListLoaded = useProductStore(
-    (state) => state.handleFoodListLoaded
-  );
+
   // Foods filtering state updater
   const [foodListFiltered, setFoodListFiltered] = useState(foodList);
 
   // Foods filter text in search input
   const selectText = useProductStore((state) => state.selectText);
-  // Foods select text state updater
-  const handleSelectText = useProductStore((state) => state.handleSelectText);
+
   // Foods filtering due to filter text in search input
   const filterFoods = (text) => {
     const foods = foodList;
@@ -100,9 +91,9 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   const onSubmit2 = (data) => console.log(data);
 
   // Drawer handlers
-  const showDrawer = () => {
-    setOpen(true);
-  };
+  // const showDrawer = () => {
+  //   setOpen(true);
+  // };
   const onClose = () => {
     if (showPayment) {
       setShowPayment(false);
@@ -155,8 +146,8 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
   // quantity handler
   const ProductQuantity = useProductStore((state) => state.productQuantity);
 
-  // Calculating total price
-  const totalPrice = useProductStore((state) => state.calculateTotalPrice);
+  // // Calculating total price
+  // const totalPrice = useProductStore((state) => state.calculateTotalPrice);
 
   // food notes handler
   const handleFoodNote = useProductStore((state) => state.handleFoodNote);
@@ -168,9 +159,20 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     }
   }, [total]);
 
+  const memoizedFilterFoods = useCallback(
+    (text) => {
+      return filterFoods(text);
+    },
+    [filterFoods]
+  );
+
   useEffect(() => {
-    setFoodListFiltered(filterFoods(selectText));
-  }, [selectText]);
+    setFoodListFiltered(memoizedFilterFoods(selectText));
+  }, [selectText, memoizedFilterFoods]);
+
+  // useEffect(() => {
+  //   setFoodListFiltered(filterFoods(selectText));
+  // }, [selectText, filterFoods]);
 
   return (
     <>
@@ -326,7 +328,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
                         />
                       </div>
                       <div
-                        onClick={(e) => deleteSelectedProduct(item.id)}
+                        onClick={() => deleteSelectedProduct(item.id)}
                         className="col-second w-[15%] aspect-square rounded-[8px] border-[1px] border-[#FF7CA3] flex justify-center items-center text-center text-[#FF7CA3] cursor-pointer duration-500 hover:border-red-700 hover:text-red-700"
                       >
                         <DeleteOutlined />
@@ -430,26 +432,6 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
             }}
           >
             <FoodCardImage item={item} />
-            {/* {item.isLoaded ? (
-              <Image
-                width={200}
-                src={item.image}
-                alt={item.name}
-                onClick={(e) => e.stopPropagation()}
-                className="rounded-full"
-              />
-            ) : (
-              <LazyLoadImage
-                src={item.image}
-                alt={item.name}
-                effect="blur"
-                wrapperProps={{
-                  style: { transitionDelay: "0.5s" },
-                }}
-                onLoad={() => handleFoodListLoaded(item.id)}
-                onClick={(e) => e.stopPropagation()}
-              />
-            )} */}
             <div className="food-name">{item.name}</div>
             <div className="food-price">{item.price}</div>
             <div className="food-available">{item.available}</div>
@@ -460,5 +442,10 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
     </>
   );
 }
+
+FoodList.propTypes = {
+  seenFoodNav: PropTypes.boolean,
+  seenFoodFilter: PropTypes.boolean,
+};
 
 export default FoodList;

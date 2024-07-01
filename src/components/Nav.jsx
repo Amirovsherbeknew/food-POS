@@ -1,6 +1,6 @@
-import { Tabs } from "antd";
-import clsx from "clsx";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { Tabs } from "antd";
 
 import "@/assets/styles/global.scss";
 
@@ -31,7 +31,7 @@ const linkLists = [
   },
 ];
 
-function Nav({ links = linkLists, className }) {
+function Nav({ links = linkLists }) {
   const items = links.map((item, ind) => ({
     key: String(ind),
     label: (
@@ -80,4 +80,7 @@ function Nav({ links = linkLists, className }) {
   );
 }
 
+Nav.propTypes = {
+  links: PropTypes.array,
+};
 export default Nav;

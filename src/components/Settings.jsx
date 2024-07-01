@@ -63,7 +63,7 @@ function Settings() {
   const [updateFoodItem, setUpdateFoodItem] = useState(null);
 
   // Nav active tab key
-  const [key, setKey] = useState(null);
+  // const [key, setKey] = useState(null);
 
   // Text in search
   const selectText = useProductStore((state) => state.selectText);
@@ -121,7 +121,7 @@ function Settings() {
                 <div
                   className="card-edit"
                   onClick={() => {
-                    setUpdateFoodItem((prevItem) => item);
+                    setUpdateFoodItem(item);
                     setFoodName(item.name);
                     setFoodPrice(item.price);
                     setFoodImage(item.image);
@@ -239,13 +239,7 @@ function Settings() {
   const [validImage, setValidImage] = useState(false);
   const [imageError, setImageError] = useState("");
 
-  const {
-    reset,
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const { reset, register, handleSubmit, setValue } = useForm();
 
   // Handling Bar states
   const handleLinkClick = (ind) => {
@@ -394,10 +388,10 @@ function Settings() {
               <Tabs
                 defaultActiveKey="1"
                 items={items}
-                onChange={(key) => {
-                  console.log(key);
-                  setKey(key);
-                }}
+                // onChange={(key) => {
+                //   console.log(key);
+                //   setKey(key);
+                // }}
                 tabBarStyle={{ color: "white !important", fontWeight: "500" }}
               ></Tabs>
               <hr />
@@ -485,7 +479,7 @@ function Settings() {
           >
             <div
               className="absolute top-[1.5rem] right-[2rem] text-[1.5rem] cursor-pointer"
-              onClick={(e) => {
+              onClick={() => {
                 console.log("X closed");
                 setFoodName("");
                 setFoodPrice(0);
