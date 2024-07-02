@@ -584,3 +584,10 @@ button {
 .ant-image-mask {
   border-radius: 50%;
 }
+
+// Apex charts
+.apexcharts-legend-series {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
