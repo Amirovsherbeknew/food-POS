@@ -10,7 +10,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 
 import useProductStore from "@/store/store";
 
-import Nav from "@/components/Nav";
+import Navbar from "@/components/Navbar";
 import PaymentForm from "../paymentForm";
 import FoodCardImage from "../FoodCardImage";
 
@@ -372,7 +372,7 @@ function FoodList({ seenFoodNav = false, seenFoodFilter = false }) {
         </Drawer>
       </Drawer>
       {/* Foods Nav */}
-      {!seenFoodNav || <Nav />}
+      {!seenFoodNav || <Navbar />}
       {/* Foods Filter */}
       {seenFoodFilter && (
         <div className="filter mt-[1.5rem] flex flex-wrap justify-between items-center !text-white">

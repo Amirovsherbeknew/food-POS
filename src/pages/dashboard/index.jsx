@@ -1,7 +1,7 @@
+import Dashboard from "@/components/Dashboard";
 
-function Dashboard() {
- 
-  return <div>Dashboard</div>;
+function DashboardPage() {
+  return <Dashboard />;
 }
 
-export default Dashboard;
+export default DashboardPage;
